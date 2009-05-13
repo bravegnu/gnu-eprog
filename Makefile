@@ -6,7 +6,7 @@ images = flash-ram-mm.png linker.png relocation.png sections.png
 %.png: %.svg
 	inkscape --without-gui --export-background="#ffffcc" $(and ($EXPORT_WIDTH),--export-width=$(EXPORT_WIDTH)) --export-area-drawing --export-png=$@ $<
 
-all: gnu-emb-prog.html $(images)
+all: gnu-eprog.html $(images)
 
 %.xml: %.txt
 	asciidoc -b docbook  $<
