@@ -1020,7 +1020,7 @@ http://www.methods.co.nz/asciidoc/[asciidoc], and converted to HTML
 using the http://docbook.sourceforge.net/[docbook-xsl] stylesheets. 
 
 Please send patches against the asciidoc source to Vijay Kumar B.,
-vijaykumar@bravegnu.org.
+<vijaykumar@bravegnu.org>.
 
 [[credits]]
 Credits
