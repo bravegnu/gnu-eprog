@@ -10,6 +10,8 @@ version="1.0">
 <xsl:param name="use.id.as.filename" select="'1'"/>
 <xsl:param name="chunk.quietly" select="1"/>
 
+<xsl:param name="generate.revhistory.link" select="1"></xsl:param>
+
 <xsl:param name="generate.toc">
 article   toc,title
 </xsl:param>
