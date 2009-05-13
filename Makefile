@@ -6,7 +6,7 @@ images = flash-ram-mm.png linker.png relocation.png sections.png
 %.png: %.svg
 	inkscape --without-gui --export-background="#ffffcc" $(and ($EXPORT_WIDTH),--export-width=$(EXPORT_WIDTH)) --export-area-drawing --export-png=$@ $<
 
-all: learning-arm.html $(images)
+all: gnu-emb-prog.html $(images)
 
 %.xml: %.txt
 	asciidoc -b docbook  $<
