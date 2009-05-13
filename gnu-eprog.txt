@@ -1009,6 +1009,9 @@ repo using the following command.
 $ hg clone http://mercurial.intuxication.org/hg/gnu-eprog
 ------
 
+If you are not familiar with mercurial, you can grab the latest source
+from
+http://mercurial.intuxication.org/hg/gnu-eprog/archive/tip.tar.bz2[http://mercurial.intuxication.org/hg/gnu-eprog/archive/tip.tar.bz2]
 You can also browse the repo at
 http://mercurial.intuxication.org/hg/gnu-eprog[http://mercurial.intuxication.org/hg/gnu-eprog]
 
