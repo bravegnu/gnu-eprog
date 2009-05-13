@@ -985,8 +985,7 @@ Attribution-Share Alike 3.0 Unported License].
 Appendix A: ARM Programmer's Model
 ----------------------------------
 
-The ARM processor has a very simple programmer's model and instruction
-set.
+A simplified ARM programmer's model is provided in this section.
 
 .Register File
 
@@ -1035,10 +1034,14 @@ Negative `N`   Operation resulted in a negative value.
 Appendix B: ARM Instruction Set
 -------------------------------
 
-The ARM processor has a load store instruction set. All arithmetic and
-logical instruction take only register operands. They cannot directly
-operate on operands to memory. Separate instruction available for
-moving data between registers and memory. 
+The ARM processor has a powerful instruction set. But only a subset
+required to understand the examples in this tutorial will be discussed
+here.
+
+The ARM has a load store architecture, meaning that all arithmetic and
+logical instructions take only register operands. They cannot directly
+operate on operands to memory. Separate instruction load and store
+instructions are used for moving data between registers and memory.
 
 In this section, the following class of instructions will be
 elaborated
@@ -1093,6 +1096,45 @@ shown below.
 
 ------
 mov pc, lr
+------
+
+.Conditional Execution
+
+Most other instruction sets allow conditional execution of branch
+instructions, based on the state of the condition flags. In ARM,
+almost all instructions have can be conditionally executed.
+
+If corresponding condition is true, the instruction is executed. If
+the codition is false, the instruction is turned into a `nop`. The
+condition is specified by suffixing the instruction with a condition
+code mneumonic.
+
+`-----------------`-------------------------------
+Mneumonic         Condition
+--------------------------------------------------
+EQ		  Equal
+NE		  Not Equal
+CS		  Carry Set
+CC		  Carry Clear
+VC		  Overflow Clear
+VS		  Overflow Set
+PL		  Positive
+MI		  Minus
+HI		  Higher Than
+HS		  Higher or Same
+LO		  Lower Than
+LS		  Lower or Same
+GT		  Greater Than
+GE		  Greater Than or Equal
+LT		  Less Than
+LE		  Less Than or Equal
+--------------------------------------------------
+
+In the following example, the instruction moves `r1` to `r0` only if
+carry is set.
+
+------
+MOVCS r0, r1
 ------
 
 .Load Store Instructions
