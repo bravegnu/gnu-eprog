@@ -1017,8 +1017,35 @@ http://mercurial.intuxication.org/hg/gnu-eprog[http://mercurial.intuxication.org
 
 The document is written in
 http://www.methods.co.nz/asciidoc/[asciidoc], and converted to HTML
-using the http://docbook.sourceforge.net/[docbook-xsl] stylesheets. To
-contribute please send patches against the asciidoc source.
+using the http://docbook.sourceforge.net/[docbook-xsl] stylesheets. 
+
+Please send patches against the asciidoc source to Vijay Kumar B.,
+vijaykumar@bravegnu.org.
+
+[[credits]]
+Credits
+-------
+
+People
+~~~~~~
+
+The original tutorial was written by Vijay Kumar B.,
+<vijaykumar@bravegnu.org>
+
+Tools
+~~~~~
+
+The following great free software tools were used for the construction
+of the tutorial.
+
+  1. http://www.methods.co.nz/asciidoc/[asciidoc] for lightweight markup
+  2. http://www.xmlsoft.org/XSLT/xsltproc2.html[xsltproc] for HTML transformation
+  3. http://docbook.sourceforge.net/[docbook-xsl] for the stylesheets
+  4. http://www.gnome.org/projects/dia/[dia] for diagram creation
+  5. http://www.gosquared.com/liquidicity/archives/611[GoSquared Arrow
+     Icons] for the navigation icons
+  6. http://www.selenic.com/mercurial/[mercurial] for version control
+  7. http://www.gnu.org/software/emacs/[emacs] ...
 
 [[copyright]]
 Tutorial Copyright

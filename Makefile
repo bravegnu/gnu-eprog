@@ -12,7 +12,8 @@ htmls = arm-iset.html \
 	linker.html \
 	c-startup.html \
 	exc-handle.html \
-	contributing.html
+	contributing.html \
+	credits.html
 
 all: $(htmls)
 
