@@ -2,6 +2,7 @@ Embedded Programming with the GNU Toolchain
 ===========================================
 Vijay Kumar B. <vijaykumar@bravegnu.org>
 
+[[intro]]
 Introduction
 ------------
 
@@ -19,6 +20,7 @@ like:
 But for the convenience of the reader, frequently used ARM
 instructions are listed in the appendix.
 
+[[arm-lab]]
 Setting up the ARM Lab
 ----------------------
 
@@ -89,6 +91,7 @@ $ PATH=$HOME/toolchains/arm-2008q1/bin:$PATH
 +
   4. You might want to add the previous line to your `.bashrc`.
 
+[[hello-arm]]
 Hello ARM
 ---------
 
@@ -343,6 +346,7 @@ output of the command is shown below.
 0x0000000c:  b  0xc
 ------
 
+[[asm-directives]]
 More Assembler Directives
 -------------------------
 
@@ -463,6 +467,7 @@ NOTE: Unlike the `.byte` directive, the `.equ` directive itself does
 not allocate any memory. They just create entries in the symbol
 table. 
 
+[[using-ram]]
 Using RAM
 ---------
 
@@ -482,6 +487,7 @@ Necessary setup has to be done to place the variables at this
 address. To understand what has to be done, the role of assembler and
 linker has to be understood.
 
+[[linker]]
 Linker
 ------
 
@@ -696,6 +702,7 @@ figure.
 .Section Merging and Placement
 image::relocation.png[Section Merging and Placement]
 
+[[lds]]
 Linker Script File
 ------------------
 
@@ -799,6 +806,7 @@ From the symbol table it is obvious that the `.text` is placed
 starting from address `0x0` and `.data` section is placed starting
 from address `0x400`.
 
+[[data-in-ram]]
 Data in RAM, Example
 --------------------
 
@@ -973,6 +981,7 @@ before performing a memory access. Our code works because the
 simulated memory does not require the memory controller to be
 initialized.
 
+[[copyright]]
 Tutorial Copyright
 ------------------
 "Embedded Programming with the GNU Toolchain" is Copyright (C) 2009
@@ -982,6 +991,7 @@ This work is licensed under a
 http://creativecommons.org/licenses/by-sa/3.0/[Creative Commons
 Attribution-Share Alike 3.0 Unported License].
 
+[[arm-prog-model]]
 Appendix A: ARM Programmer's Model
 ----------------------------------
 
@@ -1031,6 +1041,7 @@ Zero `Z`       Operation resulted in 0.
 Negative `N`   Operation resulted in a negative value.
 ---------------------------------------------
 
+[[arm-iset]]
 Appendix B: ARM Instruction Set
 -------------------------------
 

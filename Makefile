@@ -1,21 +1,29 @@
 images = flash-ram-mm.png linker.png relocation.png sections.png
+htmls = arm-iset.html \
+	asm-directives.html \
+	data-in-ram.html \
+	index.html \
+	using-ram.html \
+	arm-lab.html \
+	copyright.html \
+	exc-handle.html \
+	lds.html \
+	arm-prog-model.html \
+	c-startup.html \
+	hello-arm.html \
+	linker.html
 
-%.png: %.dia
-	dia --export=$@ --filter=png-libart $<
+all: $(htmls)
 
-%.png: %.svg
-	inkscape --without-gui --export-background="#ffffcc" $(and ($EXPORT_WIDTH),--export-width=$(EXPORT_WIDTH)) --export-area-drawing --export-png=$@ $<
-
-all: gnu-eprog.html $(images)
+$(htmls): gnu-eprog.xml $(images)
+	xsltproc docbook.xsl  $< > $@
+	-tidy -m $(htmls)
 
 %.xml: %.txt
 	asciidoc -b docbook  $<
 
-%.untidy.html: %.xml
-	xsltproc docbook.xsl  $< > $@
-
-%.html: %.untidy.html
-	-tidy $< > $@
+%.png: %.dia
+	dia --export=$@ --filter=png-libart $<
 
 clean:
 	rm -f *.html
