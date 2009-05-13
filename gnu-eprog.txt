@@ -124,6 +124,7 @@ assembler. Assembler directives always start with a `.` (period).
 
 Here is a very simple ARM assembly program to add two numbers.
 
+[[add]]
 .Adding Two Numbers
 ------
 	.text                
@@ -985,7 +986,69 @@ initialized.
 Exception Handling
 ------------------
 
-FIXME: This section is yet to be written.
+The examples given so far have a major bug. The first 8 words in the
+memory map are reserved for the execption vectors. When an exception
+occurs the control is transferred to one these 8 locations. The
+exceptions and their execption vector addresses are show in the
+following table.
+
+.Exception Vector Addresses
+`------------------------`----------------
+Exception                Address
+------------------------------------------
+Reset                    0x00
+Undefined Instruction	 0x04
+Software Interrupt (SWI) 0x08
+Prefetch Abort		 0x0C
+Data Abort		 0x10
+--			 0x14
+IRQ			 0x18
+FIQ			 0x1C
+---------------------------------------
+
+These locations are supposed to contain a branch that will transfer
+control the appropriate exception handler. In the examples we have
+seen so far, we haven't inserted branch instructions at the exception
+vector addresses. We got away without issues since these exceptions
+did not occur. All the above programs can be fixed, by linking them
+with the following assembly code.
+
+------
+	.section "vectors"
+reset:	b     start
+undef:  b     undef
+swi:	b     swi
+pabt:	b     pabt
+dabt:	b     dabt
+	nop
+irq:	b     irq
+fiq:	b     fiq
+------
+
+Only the reset exception is vectored to a different address
+`start`. All other exceptions are vectored to the same address. So if
+any exception other that reset occurs, the processor will be spinning
+in the same location. The exception can then be identified by looking
+at the value of `pc` through a debugger (the monitor interface in our
+case).
+
+To ensure that these instruction are placed at the exception vector
+addresses, the linker script should look something like below.
+
+------
+SECTIONS {
+	. = 0x00000000;
+	.text : {
+		* (vectors);
+		* (.text); 
+		...
+	}
+	...
+}
+------
+
+Notice how the `vectors` section is placed before all other code,
+ensuring that the `vectors` is located at address starting from 0x0.
 
 [[c-startup]]
 C Startup
