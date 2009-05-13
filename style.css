@@ -20,7 +20,14 @@ body {
 
 .informaltable td, .informaltable th {
 	border-style: none;
-	padding: 4px
+	padding-left: 1em;
+	padding-right: 1em;
+}
+
+.table table td, .table table th {
+	border-style: none;
+	padding-left: 1em;
+	padding-right: 1em;
 }
 
 h1 {

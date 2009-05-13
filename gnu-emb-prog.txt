@@ -973,4 +973,181 @@ before performing a memory access. Our code works because the
 simulated memory does not require the memory controller to be
 initialized.
 
+Tutorial Copyright
+------------------
+"Embedded Programming with the GNU Toolchain" is Copyright (C) 2009
+Vijay Kumar B. <vijaykumar@bravegnu.org>
 
+This work is licensed under a
+http://creativecommons.org/licenses/by-sa/3.0/[Creative Commons
+Attribution-Share Alike 3.0 Unported License].
+
+Appendix A: ARM Programmer's Model
+----------------------------------
+
+The ARM processor has a very simple programmer's model and instruction
+set.
+
+.Register File
+
+In the ARM processor, 16 general purpose registers are available at
+any time. Each register is 32-bit in size. The registers are referred
+to as `rn`, where n represents the register index. All instructions
+treat registers `r0` to `r13` equally. Any operation that can be
+performed on `r0` can be performed equally well on registers `r1` to
+`r13`. But `r14` and `r15` are assigned special functions by the
+processor. `r15` is the program counter, and contains the address of
+the next instruction to be fetched. `r14` is the link register, and
+used to store the return address, when a subroutine is invoked.
+
+TIP: Though register `r13` has no special function assigned to by the
+processor, conventionally operating systems use it as the stack
+pointer, and thus points to the top of the stack.
+
+.Current Program Status Register
+
+The Current Program Status Register (`cpsr`) is a dedicated 32-bit
+register, that contains the following fields.
+
+    . Condition Flags
+    . Interrupt Masks
+    . Processor Mode
+    . Processor State
+
+Only the condition flags field will be used in the examples provided
+in this tutorial. And hence only the condition flags will be
+elaborated here.
+
+The condition flags indicates the various conditions that occur while
+performing arithmetic and logical operations. The various condition
+flags and their meaning are given in the following table.
+
+.Condition Flags
+`--------------`-----------------------------
+Flag           Meaning
+---------------------------------------------
+Carry `C`      Operation caused a carry.
+Overflow `O`   Operation caused an overflow.
+Zero `Z`       Operation resulted in 0.
+Negative `N`   Operation resulted in a negative value.
+---------------------------------------------
+
+Appendix B: ARM Instruction Set
+-------------------------------
+
+The ARM processor has a load store instruction set. All arithmetic and
+logical instruction take only register operands. They cannot directly
+operate on operands to memory. Separate instruction available for
+moving data between registers and memory. 
+
+In this section, the following class of instructions will be
+elaborated
+
+  1. Data Processing Instructions
+  2. Branch Instructions
+  3. Load Store Instructions
+
+.Data Processing Instructions
+
+The most common data processing instructions are listed in the
+following table.
+
+.Data Processing Instructions
+`---------------`---------------`----------------`-----------------
+Instruction     Operation       Example		
+--------------------------------------------------------------------
+`mov rd, n`     `rd = n`        `mov r7, r5`     `; r7 = r5`
+`add rd, rn, n` `rd = rn + n`   `add r0, r0, #1` `; r0 = r0 + 1`
+`sub rd, rn, n` `rd = rn - n`   `sub r0, r2, r1` `; r0 = r2 + r1`
+`cmp rn, n`     `rn - n`        `cmp r1, r2`     `; r1 - r2`
+--------------------------------------------------------------------
+
+By default data processing instructions *do not* update the condition
+flags. Instructions will update condition flags if it is suffixed with
+an `S`. For example, the following instruction adds two registers and
+updates the condition flags.
+
+------
+adds r0, r1, r2
+------
+
+One exception to this rule is the `cmp` instruction. Since the only
+purpose of the `cmp` instruction is to set condition flags, it does
+not require the `s` suffix, for setting flags.
+
+.Branch Instructions
+
+The branch instructions cause the processor to execute instructions
+from a different address. Two branch instruction are available - `b`
+and `bl`. The `bl` instruction in addition to branching, also stores
+the return address in the `lr` register, and hence can be used for
+sub-routine invocation. The instruction syntax is given below.
+
+------
+b label        ; pc = label
+bl label       ; pc = label, lr = addr of next instruction
+------
+
+To return from the subroutine, the `mov` instruction can be used as
+shown below.
+
+------
+mov pc, lr
+------
+
+.Load Store Instructions
+
+The load store instruction can be used to move single data item
+between register and memory. The instruction syntax is given below.
+
+------
+ldr   rd, addressing    ; rd = mem32[addr]
+str   rd, addressing    ; mem32[addr] = rd
+ldrb  rd, addressing    ; rd = mem8[addr]
+strb  rd, addressing    ; mem8[addr] = rd
+------
+
+The `addressing` is formed from two parts
+
+  * base register
+  * offset
+
+The base register can be any general purpose register. The offset and
+base register can interact in 3 different ways.
+
+Offset::
+The offset is added or subtracted from the base register to form the
+address. `ldr` Syntax: `ldr rd, [rm, offset]`
+
+Pre-indexed::
+The offset is added or subtracted from the base register to form the
+address, and the address is written back to the base register. `ldr`
+Syntax `ldr rd, [rm, offset]!`
+
+Post-indexed::
+The base register contains the address to be accessed, and the offset
+is added or subtracted from the address and stored in the base
+register. `ldr` Syntax `ldr rd, [rm], offset`
+
+The offset can be in the following formats
+
+Immediate:: 
+Offset is an unsigned number, that can be added or subtracted from the
+base register. Useful for accessing structure members, local variables
+in the stack. Immediate values start with a `#`.
+
+Register::
+Offset is an unsigned value in a general purpose register, that can be a
+added or subtracted from the base register. Useful for accessing array
+elements.
+
+Some examples of load store instructions are given below.
+
+------
+ldr  r1, [r0]              ; same as ldr r1, [r0, #0], r1 = mem32[r0]
+ldr  r8, [r3, #4]          ; r8 = mem32[r3 + 4]
+ldr  r12, [r13, #-4]       ; r12 = mem32[r13 - 4]
+strb r10, [r7, -r4]        ; mem8[r7 - r4] = r10
+strb r7, [r6, #-1]!        ; mem8[r6 - 1] = r7, r6 = r6 - 1
+str  r2, [r5], #8          ; mem32[r5] = r2, r5 = r5 + 8
+------
