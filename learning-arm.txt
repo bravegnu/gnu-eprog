@@ -1,0 +1,976 @@
+Embedded Programming with the GNU Toolchain
+===========================================
+Vijay Kumar B. <vijaykumar@bravegnu.org>
+
+Introduction
+------------
+
+This tutorial shows how to program an embedded system using the GNU
+toolchain. For this purpose, an ARM based embedded system is emulated
+using Qemu. With this you can learn embedded system programming using
+the GNU Toolchain, and can develop code from the comforts of your
+desktop. This tutorial itself does not teach the ARM instruction
+set. It is supposed to be used with other books and on-line tutorials
+like:
+
+  * ARM Assembler - http://www.heyrick.co.uk/assembler/
+  * ARM Assembly Language Programming - http://www.arm.com/miscPDFs/9658.pdf
+
+But for the convenience of the reader, frequently used ARM
+instructions are listed in the appendix.
+
+Setting up the ARM Lab
+----------------------
+
+This section shows how to setup a simple ARM development and testing
+environment in your PC, using Qemu and the GNU toolchain. Qemu is a
+machine emulator capable of emulating various machines including ARM
+based machines. You can write ARM assembly programs, compile them
+using the GNU toolchain and execute and test them in Qemu.
+
+Qemu ARM
+~~~~~~~~
+
+Qemu will be used to emulate a PXA255 based 'connex' board from
+Gumstix. You should have at least version 0.9.1 of Qemu to work with
+this tutorial.
+
+The PXA255 has an ARM core with a ARMv5TE compliant instruction
+set. The PXA255 also has several on-chip peripherals. Some peripherals
+will be introduced in the course of the tutorial.
+
+Installing Qemu in Debian
+~~~~~~~~~~~~~~~~~~~~~~~~~
+ 
+Debian Etch has a `qemu` package, but the version is 0.8.2, which does
+not have the connex board emulation. Debian Etch backports has version
+0.9.1 of qemu. To install from backports:
+
+  1. Add the following line to `/etc/apt/source.list`
++
+------
+deb http://www.backports.org/debian etch-backports main contrib non-free
+------
++
+  2. Add the archive's key to `apt`.
++
+------
+$ wget -O - http://backports.org/debian/archive.key | apt-key add -
+------
++
+  3. Run `apt-get update`.
+  4. Install `qemu` from backports
++
+------
+$ apt-get -t etch-backports install qemu
+------
+
+Installing GNU Toolchain for ARM
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  1. Folks at codesourcery.com have been kind enough to make GNU
+     toolchains available for various architectures. Download the GNU
+     toolchain for ARM, available from from
+     http://www.codesourcery.com/gnu_toolchains/arm
++
+  2. Extract the tar archive, to `~/toolchains`.
++
+------
+$ mkdir ~/toolchains
+$ cd ~/toolchains
+$ tar -jxf ~/downloads/arm-2008q1-126-arm-none-eabi-i686-pc-linux-gnu.tar.bz2 
+------
++
+  3. Add the toolchain to your `PATH`.
++
+------
+$ PATH=$HOME/toolchains/arm-2008q1/bin:$PATH
+------
++
+  4. You might want to add the previous line to your `.bashrc`.
+
+Hello ARM
+---------
+
+In this section, you will learn to assemble a simple ARM program, and
+test it on a bare metal connex board emulated by Qemu.
+
+The assembly program source file consists of a sequence of statements,
+one per line. Each statement has the following format.
+
+------
+label:    instruction         @ comment
+------
+
+Each of the components is optional. 
+
+`label`::
+The label is a convenient way to refer to the location of the
+instruction in memory. The label can be used where ever an address can
+appear, for example as an operand of branch instruction. The label
+name should consist of alphabets, digits, `_` and `$`.
+
+`comment`::
+A comment starts with an `@`, and the characters that appear after an
+`@` are ignored.
+
+`instruction`::
+The `instruction` could be an ARM instruction or an assembler
+directive. Assembler directives are commands to the
+assembler. Assembler directives always start with a `.` (period).
+
+Here is a very simple ARM assembly program to add two numbers.
+
+.Adding Two Numbers
+------
+	.text                
+start:                       @ Label, not really required
+	mov   r0, #5	     @ Load register r0 with the value 5
+	mov   r1, #4	     @ Load register r1 with the value 4
+	add   r2, r1, r0     @ Add r0 and r1 and store in r2
+	
+stop:	b stop               @ Infinite loop to stop execution
+------
+
+The `.text` is an assembler directive, which says that the following
+instructions have to be assembled into the code section, rather than
+the `.data` section. Sections will be covered in detail, later in the
+tutorial.
+
+Building the Binary
+~~~~~~~~~~~~~~~~~~~
+
+Save the program in a file say `add.s`. To assemble the file, invoke
+the GNU Toolchain's assembler `as`, as shown in the following command.
+
+------
+$ arm-none-eabi-as -o add.o add.s
+------
+
+The `-o` option specifies the output filename. 
+
+NOTE: Cross toolchains are always prefixed with the target
+architecture for which they are built, to avoid name conflicts with
+the host toolchain. For the sake readability, tools will be referred
+to without the prefix, in the text.
+
+To generate the executable file, invoke the GNU Toolchain's linker
+`ld`, as shown in the following command.
+
+------
+$ arm-none-eabi-ld -Ttext=0x0 -o add.elf add.o
+------
+
+Here again, the `-o` option specifies the output filename. The
+`-Ttext=0x0`, specifies that addresses should be assigned to the
+labels, such that the instructions were starting from address
+`0x0`. To view the address assignment for various labels, the `nm`
+command can be used as shown below.
+
+------
+$ arm-none-eabi-nm add.elf
+... clip ...
+00000000 t start
+0000000c t stop
+------
+
+Note the address assignment for the labels `start` and `stop`. The
+address assigned for `start` is `0x0`. Since it is the label of the
+first instruction. The label `stop` is after 3 instructions. Each
+instructions is 4 bytes. Hence `stop` is assigned an address `12`
+(`0xC`).
+
+Linking with a different base address for the instructions will result
+in a different set of addresses being assigned to the labels.
+
+------
+$ arm-none-eabi-ld -Ttext=0x20000000 -o add.elf add.o
+$ arm-none-eabi-nm add.elf
+... clip ...
+20000000 t start
+2000000c t stop
+------
+
+The output file created by `ld` is in a format called `ELF`. Various
+file formats are available for storing executable code. The ELF format
+works fine when you have an OS around, but since we are going to run
+the program on bare metal, we will have to convert it to a simpler
+file format called the `binary` format.
+
+A file in `binary` format contains consecutive bytes from a specific
+memory address. No other additional information is stored in the
+file. This is convenient for Flash programming tools, since all that
+has to be done when programming is to copy each byte in the file, to
+consecutive address starting from a specified base address in memory.
+
+The GNU toolchain's `objcopy` command can be used to convert between
+different object file formats. A common usage of the command is given
+below.
+
+------
+objcopy -O <output-format> <in-file> <out-file>
+------
+
+To convert `add.elf` to binary format the following command can be
+used.
+
+------
+$ arm-none-eabi-objcopy -O binary add.elf add.bin
+------
+
+Check the size of the file. The file will be exactly 16 bytes. Since
+there are 4 instructions and each instruction occupies 4 bytes.
+
+------
+$ ls -al add.bin
+-rw-r--r-- 1 vijaykumar vijaykumar 16 2008-10-03 23:56 add.bin
+------
+
+Executing in Qemu
+~~~~~~~~~~~~~~~~~
+
+When the ARM processor is reset, it starts executing from address
+`0x0`. On the connex board a 16MB Flash is located at address
+`0x0`. The instructions present in the beginning of the Flash will be
+executed.
+
+When `qemu` emulates the connex board, a file has to be specified
+which will be treated file as Flash memory. The Flash file format is
+very simple. To get the byte from address X in the Flash, `qemu` reads
+the byte from offset X in the file. In fact, this is the same as the
+binary file format.
+
+To test the program, on the emulated Gumstix connex board, we first
+create a 16MB file representing the Flash. We use the `dd` command to
+copy 16MB of zeroes from `/dev/zero` to the file `flash.bin`. The data
+is copied in 4K blocks.
+
+------
+$ dd if=/dev/zero of=flash.bin bs=4096 count=4096
+------
+
+`add.bin` file is then copied into the beginning of the Flash, using
+the following command.
+
+------
+$ dd if=add.bin of=flash.bin bs=4096
+------
+
+This is the equivalent of programming the `bin` file on to the Flash
+memory.
+
+After reset, the processor will start executing from address `0x0`,
+and the instructions from the program will get executed. The command
+to invoke `qemu` is given below.
+
+------
+$ qemu-system-arm -M connex -pflash flash.bin -nographic -serial /dev/null
+------
+
+The `-M connex` option specifies that the machine `connex` is to be
+emulated. The `-pflash` options specifies that `flash.bin` file
+represents the Flash memory. The `-nographic` specifies that
+simulation of a graphical display is not required. The `-serial
+/dev/null` specifies that the serial port of the connex board is to be
+connected to `/dev/null`, so that the serial port data is discarded.
+
+The system executes the instructions and after completion, keeps
+looping infinitely in the `stop: b stop` instruction. To view the
+contents of the registers, the monitor interface of `qemu` can be
+used. The monitor interface is a command line interface, through which
+the emulated system can be controlled and the status of the system can
+be viewed. When `qemu` is started with the above mentioned command,
+the monitor interface is provided in the standard I/O of `qemu`.
+
+To view the contents of the registers the `info registers` monitor
+command can be used.
+
+------
+(qemu) info registers
+R00=00000005 R01=00000004 R02=00000009 R03=00000000
+R04=00000000 R05=00000000 R06=00000000 R07=00000000
+R08=00000000 R09=00000000 R10=00000000 R11=00000000
+R12=00000000 R13=00000000 R14=00000000 R15=0000000c
+PSR=400001d3 -Z-- A svc32
+------
+
+Note the value in register `R02`. The register contains the result of
+the addition and should match with the expected value of 9.
+
+More Monitor Commands
+~~~~~~~~~~~~~~~~~~~~~
+
+Some useful `qemu` monitor commands are listed in the following table.
+
+`-----------------`-------------------------------
+Command           Purpose
+--------------------------------------------------
+`help`		  List available commands
+`quit`		  Quits the emulator
+`xp /fmt addr`	  Physical memory dump from `addr`
+`system_reset`    Reset the system.
+--------------------------------------------------
+
+The `xp` command deserves more explanation. The `fmt` argument
+specifies how the memory contents is to be displayed. The syntax of
+`fmt` is `<count><format><size>`.
+
+`count`::
+specifies no. of data items to be dumped.
+
+`size`::
+specifies the size of each data item. `b` for 8 bits, `h` for 16 bits,
+`w` for 32 bits and `g` for 64 bits.
+
+`format`::
+specifies the display format. `x` for hex, `d` for signed decimal, `u`
+for unsigned decimal, `o` for octal, `c` for char and `i` for
+asm instructions.
+
+This `xp` command with the `i` format, can be used to disassemble the
+instructions present in memory. To disassemble the instructions
+located at `0x0`, the `xp` command the `fmt` specified as `4iw` can be
+used. The `4` specifies 4 items are to be displayed, `i` specifies
+that the items are to be printed as instructions (yes, a built in
+disassmbler!), `w` specifies that the items are 32 bits in size. The
+output of the command is shown below.
+
+------
+(qemu) xp /4iw 0x0
+0x00000000:  mov        r0, #5  ; 0x5
+0x00000004:  mov        r1, #4  ; 0x4
+0x00000008:  add        r2, r1, r0
+0x0000000c:  b  0xc
+------
+
+More Assembler Directives
+-------------------------
+
+In this section, we will describe some commonly used assembler
+directives, using two example programs.
+
+  1. A program to sum an array
+  2. A program to calculate the length of a string
+
+Sum an Array
+~~~~~~~~~~~~
+
+The following code sums an array of bytes and stores the result in
+`r3`.
+
+.Sum an Array
+------
+include::code/sum.s[]
+------
+
+The code introduces two new assembler directives -- `.byte` and
+`.align`. These assembler directives are described below.
+
+`.byte` Directive
+^^^^^^^^^^^^^^^^^
+
+The byte sized arguments of `.byte` are assembled into consecutive
+bytes in memory. There are similar directives `.2byte` and `.4byte`
+for storing 16 bit values and 32 bit values, respectively. The general
+syntax is given below.
+
+------
+.byte   exp1, exp2, ...
+.2byte  exp1, exp2, ...
+.4byte  exp1, exp2, ...
+------
+
+The arguments could be simple integer literal, represented as binary
+(prefixed by `0b` or `0B`), octal (prefixed by `0`), decimal or
+hexadecimal (prefixed by `0x` or `0X`). The integers could also be
+represented as character constants (character surrounded by single
+quotes), in which case the ASCII value of the character will be used.
+
+The arguments could also be C expressions constructed out of literals
+and other symbols. Examples are shown below.
+
+------
+pattern:  .byte 0b01010101, 0b00110011, 0b00001111
+npattern: .byte npattern - pattern
+halpha:   .byte 'A', 'B', 'C', 'D', 'E', 'F'
+dummy:    .4byte 0xDEADBEEF
+nalpha:   .byte 'Z' - 'A' + 1
+------
+
+`.align` Directive
+^^^^^^^^^^^^^^^^^^
+
+ARM requires that the instructions be present in 32-bit aligned memory
+locations. The address of the first byte, of the 4 bytes in an
+instruction instruction, should be a multiple of 4. To adhere to this,
+the `.align` directive can be used to insert padding bytes till the
+next byte address will be a multiple of 4. This is required only when
+data bytes or half words are inserted within code.
+
+String Length
+~~~~~~~~~~~~~
+
+The following code calculates the length of string and stores the
+length in register `r1`.
+
+.String Length
+------
+include::code/strlen.s[]
+------
+
+The code introduces two new assembler directives - `.asciz` and
+`.equ`. The assembler directives are described below.
+
+`.asciz` Directive
+^^^^^^^^^^^^^^^^^^
+
+The `.asciz` directive accepts string literals as arguments. String
+literal are a sequence characters in double quotes. The string
+literals are assembled into consecutive memory locations. The
+assembler automatically inserts a `nul` character ('\0' character)
+after each string.
+
+The `.ascii` directive is same as `.asciz`, but the assembler does not
+insert a `nul` character after each string.
+
+`.equ` Directive
+^^^^^^^^^^^^^^^^
+
+The assembler maintains something called a symbol table. The symbol
+table maps label names to an addresses. Whenever the assembler
+encounters a label definition, the assembler makes an entry in the
+symbol table. And whenever the assembler encounters a label reference,
+it replaces the label by the corresponding address from the symbol
+table.
+
+Using the assembler directive `.equ`, it is also possible to manually
+insert entries in the symbol table, to map names to values, which are
+not necessarily addresses. Whenever the assembler encounters these
+names, it replaces them by their corresponding values. These names and
+label names are together called symbol names.
+
+The general syntax of the directive is given below.
+
+------
+.equ name, expression
+------
+
+The `name` is a symbol name, and has the same restrictions as that of
+the label name. The `expression` could be simple literal, or an
+expression as explained for the `.byte` directive.
+
+NOTE: Unlike the `.byte` directive, the `.equ` directive itself does
+not allocate any memory. They just create entries in the symbol
+table. 
+
+Using RAM
+---------
+
+The Flash memory, in which the previous example programs were stored,
+is a kind of EEPROM. It is a useful secondary storage, like a hard
+disk, but is not convenient to store variables in Flash. The variables
+should be stored in RAM, so that they can be easily modified.
+
+The connex board has a 64 MB of RAM starting at address `0xA0000000`,
+in which variables can be stored. The memory map of the connex board
+can be pictured as shown in the following diagram.
+
+.Memory Map
+image::flash-ram-mm.png[Memory Map]
+
+Necessary setup has to be done to place the variables at this
+address. To understand what has to be done, the role of assembler and
+linker has to be understood.
+
+Linker
+------
+
+While writing a multi-file program, each file is assembled individually
+into object files. The linker combines these object files to form the
+final executable.
+
+.Role of the Linker
+image::linker.png[Role of the Linker]
+
+While combining the object files together, the linker performs the
+following operations.
+
+  1. Symbol Resolution
+  2. Relocation
+
+We will look into these operations, in greater detail, in the
+following sections.
+
+Symbol Resolution
+~~~~~~~~~~~~~~~~~
+
+In a single file program, while producing the object file, all
+references to labels are replaced by their corresponding addresses by
+the assembler. But in a multi-file program, if there are any
+references to labels defined in another file, the assembler marks
+these references as "unresolved". When these object files are passed
+to the linker, the linker determines the values for these references
+from the other object files, and patches the code with the correct
+values.
+
+The sum of array example is split into two files, to demonstrate the
+symbol resolution performed by the linker. The two files will be
+assembled and their symbol tables examined to show the presence the
+unresolved references.
+
+The file `sum-sub.s` contains the `sum` subroutine, and the file
+`main.s` invokes the subroutine with the required arguments. The
+source of the files is shown below.
+
+[[l1]]
+.`main.s` - Subroutine Invocation
+------
+include::code/main.s[]
+------
+
+[[l2]]
+.`sum-sub.s` - Subroutine Definition
+------
+include::code/sum-sub.s[]
+------
+
+A word on the `.global` directive is in order. In C, all variables
+declared outside functions are visible to other files, until
+explicitly stated as `static`. In assembly, all labels are `static`
+AKA local (to the file), until explicitly stated that they should be
+visible to other files, using the `.global` directive.
+
+The files are assembled, and the symbol tables are dumped using the
+`nm` command.
+
+------
+$ arm-none-eabi-as -o main.o main.s
+$ arm-none-eabi-as -o sum-sub.o sum-sub.s
+$ arm-none-eabi-nm main.o
+00000004 t arr
+00000007 t eoa
+00000008 t start
+00000018 t stop
+         U sum 
+$ arm-none-eabi-nm sum-sub.o
+00000004 t loop
+00000000 T sum
+------
+
+For now, focus on the letter in the second column, which specifies the
+symbol type.  A `t` indicates that the symbol is defined, in the text
+section. A `u` indicates that the symbol is undefined. A letter in
+uppercase indicates that the symbol is `.global`.
+
+It is evident that the symbol `sum` is defined in `sum-sub.o` and is
+not resolved yet in `main.o`. When the linker is invoked the symbol
+references will be resolved, and the executable will be produced. 
+
+Relocation
+~~~~~~~~~~
+
+Relocation is the process of changing addresses already assigned to
+labels. This will also involve patching up all label references to
+reflect the newly assigned address. Relocation is performed for two
+primary reasons.
+
+  1. Section Merging
+  2. Section Placement
+
+To understand the process of relocation, an understanding of the
+concept of sections is essential. 
+
+Code and data have different run time requirements. For example code
+can be placed in read-only memory, and data might require read-write
+memory. It would be convenient, if code and data is *not*
+interleaved. For this purpose, programs are divided into
+sections. Most programs have at least two sections, `.text` for code
+and `.data` for data. Assembler directives `.text` and `.data`, are
+used to switch back and forth between the two sections.
+
+It helps to imagine each section as a bucket. When the assembler hits
+a section directive, it puts the code/data following the directive in
+the appropriate bucket. Thus the code/data that belong to particular
+section appear in contiguous locations. The following figures shows
+how the assembler re-arranges data into sections.
+
+.Sections
+image::sections.png[Sections]
+
+Now that we have an understanding of sections, let us look into the
+primary reasons for which relocation is performed.
+
+Section Merging
+^^^^^^^^^^^^^^^
+
+When dealing with multi-file programs, the sections with the same name
+(example `.text`) might appear, in each file. The linker is
+responsible for merging the sections from the input files, into
+sections of the output file. By default, the sections, with the same
+name, from each file is placed contiguously and the label references
+are patched to reflect the new address.
+
+The effects of section merging can be seen by looking at the symbol
+table of the object files and the corresponding executable file. The
+multi-file sum of array program can be used to illustrate section
+merging. The symbol table of the object files `main.o` and `sum-sub.o`
+and the symbol table of the executable file `sum.elf` is shown below.
+
+------
+$ arm-none-eabi-nm main.o
+00000004 t arr
+00000007 t eoa
+00000008 t start
+00000018 t stop
+         U sum 
+$ arm-none-eabi-nm sum-sub.o
+00000004 t loop <1>
+00000000 T sum
+$ arm-none-eabi-ld -Ttext=0x0 -o sum.elf main.o sum-sub.o
+$ arm-none-eabi-nm sum.elf
+...
+00000004 t arr
+00000007 t eoa
+00000008 t start
+00000018 t stop
+00000028 t loop <1>
+00000024 T sum
+------
+
+<1> The `loop` symbol has address `0x4` in `sum-sub.o`, and `0x28` in
+`sum.elf`, since the `.text` section of `sum-sub.o` is placed right
+after the `.text` section of `main.o`.
+
+Section Placement
+^^^^^^^^^^^^^^^^^
+
+When a program is assembled, each section is assumed to start from
+address 0. And thus labels are assigned values relative to start of
+the section. When the final executable is created, the section is
+placed at some address X, and references to the labels are incremented
+by X, so that they point to the new location.
+
+The placement of each section at a particular location in memory and
+the patching of all references to the labels in the section, is done
+by the linker.
+
+The effects of section placement can be seen by looking at the symbol
+table of the object file and the corresponding executable file. The
+single file sum of array program can be used to illustrate section
+placement. To make things clearer, we will place the `.text` section
+at address `0x100`.
+
+------
+$ arm-none-eabi-as -o sum.o sum.s
+$ arm-none-eabi-nm -n sum.o
+00000000 t entry <1>
+00000004 t arr
+00000007 t eoa
+00000008 t start
+00000014 t loop
+00000024 t stop
+$ arm-none-eabi-ld -Ttext=0x100 -o sum.elf sum.o <2>
+$ arm-none-eabi-nm -n sum.elf
+00000100 t entry <3>
+00000104 t arr
+00000107 t eoa
+00000108 t start
+00000114 t loop
+00000124 t stop
+...
+------
+
+<1> The address for labels are assigned starting from `0` within a
+section. 
+
+<2> When the executable is created the linker is instructed to place
+the text section at address `0x100`.
+
+<3> The address for labels in the `.text` section are re-assigned
+starting from `0x100`, and all label references will be patched to
+reflect this.
+
+The process of section merging and placement is shown in the following
+figure.
+
+.Section Merging and Placement
+image::relocation.png[Section Merging and Placement]
+
+Linker Script File
+------------------
+
+As mentioned in the previous section, section merging and placement is
+done by the linker. The programmer can control how the sections are
+merged, and at what locations they are placed in memory through a
+linker script file. A very simple linker script file, is shown below.
+
+.Basic linker script
+------
+SECTIONS { <1>
+	. = 0x00000000; <2>
+	.text : { <3>
+		abc.o (.text); 
+		def.o (.text);
+	} <3>
+}
+------
+
+<1> The `SECTIONS` command is the most import linker command, it specifies
+how the sections are to be merged and at what location they are to be
+placed. 
+
+<2> Within the block following the `SECTIONS` command, the `.`
+(period) represents the location counter. The location is always
+initialised to `0x0`. It can be modified by assigning a new value to
+it. Setting the value to `0x0` at the beginning is superfluous.
+
+<3> This part of the script specifies that, the `.text` section from
+the input files `abc.o` and `def.o` should go to the `.text` section
+of the output file.
+
+The linker script can be further simplified and generalised by using
+the wild card character `*` instead of individually specifying the
+file names.
+
+.Wildcard in linker scripts
+------
+SECTIONS {
+	. = 0x00000000;
+	.text : { * (.text); }
+}
+------
+
+If the program contains both `.text` and `.data` sections, the `.data`
+section merging and location can be specified as shown below.
+
+[[linker1]]
+.Multiple sections in linker scripts
+------
+include::code/sum-data.lds[]
+------
+
+Here, the `.text` section is located at `0x0` and `.data` is located
+at `0x400`. Note that, if the location counter is not assigned a
+different value, the `.text` and `.data` sections will be located at
+adjacent memory locations.
+
+Linker Script Example
+~~~~~~~~~~~~~~~~~~~~~
+
+To demonstrate the use of linker scripts, we will use the linker
+script shown in <<linker1>> to control placement a program's `.text`
+and `.data` section. We will use a slightly modified version of the
+sum of array program for this purpose. The code is shown below.
+
+----
+include::code/sum-data.s[]
+----
+
+The only change here is that the array is now in the `.data`
+section. Also note that the nasty branch instruction to skip over the
+data is also not required, since the linker script will place the
+`.text` section and `.data` section appropriately. As a result,
+statements can be placed in the program, in any convenient way, and
+the linker script will take care of placing the sections correctly in
+memory.
+
+When the program is linked, the linker script is passed as an input to
+the linker, as shown in the following command.
+
+------
+$ arm-none-eabi-as -o sum-data.o sum-data.s
+$ arm-none-eabi-ld -T sum-data.lds -o sum-data.elf sum-data.o
+------
+
+The option `-T sum-data.lds` specifies that `sum-data.lds` is to be
+used as the linker script. Dumping the symbol table, will provide an
+insight into how the sections are placed in memory.
+
+------
+$ arm-none-eabi-nm -n sum-data.elf
+00000000 t start
+0000000c t loop
+0000001c t stop
+00000400 d arr
+00000403 d eoa
+------
+
+From the symbol table it is obvious that the `.text` is placed
+starting from address `0x0` and `.data` section is placed starting
+from address `0x400`.
+
+Data in RAM, Example
+--------------------
+
+Now that we know, how to write linker scripts, we will attempt to
+write a program, and place the `.data` section in RAM.
+
+The add program is modified to load two values from RAM, add them and
+store the result back to RAM. The two values and the space for result
+is placed in the `.data` section.
+
+.Add Data in RAM
+------
+include::code/add-mem.s[]
+------
+
+When the program is linked, the linker script shown below is used.
+
+------
+include::code/flash-ram.lds[]
+------
+
+The dump of the symbol table of `.elf` is shown below.
+
+------
+$ arm-none-eabi-nm -n add-mem.elf
+00000000 t start
+0000001c t stop
+a0000000 d val1
+a0000001 d val2
+a0000002 d result
+------
+
+The linker script seems to have solved the problem of placing the
+`.data` section in RAM. But wait, the solution is not complete yet!
+
+RAM is Volatile!
+~~~~~~~~~~~~~~~~
+
+RAM is volatile memory, and hence it is not possible to directly make
+the data available in RAM, on power up.
+
+All code and data *should* be stored in Flash before power-up. On
+power-up, a startup code is supposed to copy the data from Flash to
+RAM, and then proceed with the execution of the program. So the
+program's `.data` section has two addresses, a *load address* in Flash
+and a *run-time address* in RAM.
+
+TIP: In `ld` parlance, the load address is called LMA (Load Memory
+Address), and the run-time address is called VMA (Virtual Memory
+Address.).
+
+The following two modifications have to be done, to make the program
+work correctly.
+
+  1. The linker script has to be modified to specify the both the load
+     address and the run-time address, for the `.data` section.
+
+  2. A small piece of code should copy the `.data` section from Flash
+     (load address) to RAM (run-time address).
+
+Specifying Load Address
+~~~~~~~~~~~~~~~~~~~~~~~
+
+The run-time address is what that should be used for determining the
+address of labels. In the previous linker script, we have specified
+the run-time address for the `.data` section. The load address is not
+explicitly specified, and defaults to the run-time address. This is
+OK, with the previous examples, since the programs were executed
+directly from Flash. But, if data is to be placed in RAM during
+execution, the load address should correspond to Flash and the
+run-time address should correspond to RAM.
+
+A load address different from the run-time address can be specified
+using the `AT` keyword. The modified linker script is shown below.
+
+------
+SECTIONS {
+	. = 0x00000000;
+	.text : { * (.text); }
+	etext = .; <1>
+
+	. = 0xA0000000;
+	.data : AT (etext) { * (.data); } <2>
+}
+------
+
+<1> Symbols can be created on the fly within the `SECTIONS` command by
+assigning values to them. Here `etext` is assigned the value of the
+location counter at that position. `etext` contains the address of the
+next free location in Flash right after all the code. This will be
+used later on to specify where the `.data` section is to be placed in
+Flash. Note that `etext` itself will not be allocated any memory, it
+is just an entry in the symbol table.
+
+<2> The `AT` keyword specifies the load address of the `.data`
+section. An address or symbol (whose value is a valid address) could
+be passed as argument to `AT`. Here the load address of `.data` is
+specified as the location right after all the code in Flash.
+
+Copying `.data` to RAM
+~~~~~~~~~~~~~~~~~~~~~~
+
+To copy the data from Flash to RAM, the following information is
+required.
+
+  1. Address of data in Flash (`flash_sdata`)
+  2. Address of data in RAM (`ram_sdata`)
+  3. Size of the `.data` section. (`data_size`)
+
+With this information the data can be copied from Flash to RAM using
+the following code snippet.
+
+------
+	ldr   r0, =flash_sdata
+	ldr   r1, =ram_sdata
+	ldr   r2, =data_size
+
+copy:	
+	ldrb  r4, [r0], #1
+	strb  r4, [r1], #1
+	subs  r2, r2, #1
+	bne   copy
+------
+
+The linker script can be slightly modified to provide these
+information.
+
+[[linker2]]
+.Linker Script with Section Copy Symbols
+------
+SECTIONS {
+	. = 0x00000000;
+	.text : { * (.text); }
+	flash_sdata = .; <1>
+
+	. = 0xA0000000;
+	ram_sdata = .; <2>
+	.data : AT (flash_sdata) { * (.data); };
+	ram_edata = .; <3>
+	data_size = ram_edata - ram_sdata; <3>
+}
+------
+
+<1> Start of data in Flash is right after all the code in Flash.
+
+<2> Start of data in RAM is at the base address of RAM.
+
+<3> Obtaining the size of data is not straight forward. The data size
+is calculated from the difference in the start of data in RAM and the
+end of data in RAM. Yes, simple expressions are allowed within the
+linker script.
+
+The add program with data copied to RAM from Flash is listed below.
+
+.Add Data in RAM (with copy)
+------
+include::code/add-ram.s[]
+------
+
+The program is assembled and linked using the linker script listed in
+<<linker2>>. The program is executed and tested within Qemu.
+
+------
+qemu-system-arm -M connex -pflash flash.bin -nographic -serial /dev/null
+(qemu) xp /4dw 0xA0000000
+a0000000:         10         30         40          0
+------
+
+NOTE: In a real system with an SDRAM, the memory should not be
+accessed right-away. The memory controller will have to be initialized
+before performing a memory access. Our code works because the
+simulated memory does not require the memory controller to be
+initialized.
+
+

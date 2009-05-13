@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg4211"
+   sodipodi:version="0.32"
+   inkscape:version="0.44.1"
+   sodipodi:docbase="/tmp"
+   sodipodi:docname="home.svg">
+  <defs
+     id="defs4213">
+    <linearGradient
+       id="SVGID_58_"
+       gradientUnits="userSpaceOnUse"
+       x1="75.0288"
+       y1="295.536"
+       x2="50.2573"
+       y2="295.536"
+       gradientTransform="matrix(-4.37114e-8,-1,1,-4.37114e-8,-254.0609,579.9068)">
+		<stop
+   offset="0"
+   style="stop-color: rgb(77, 77, 77);"
+   id="stop533" />
+
+		<stop
+   offset="1"
+   style="stop-color: rgb(0, 0, 0);"
+   id="stop535" />
+
+	</linearGradient>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     gridtolerance="10000"
+     guidetolerance="10"
+     objecttolerance="10"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.35"
+     inkscape:cx="375"
+     inkscape:cy="520"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     inkscape:window-width="906"
+     inkscape:window-height="544"
+     inkscape:window-x="10"
+     inkscape:window-y="99" />
+  <metadata
+     id="metadata4216">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       transform="translate(166.763,6.049194)"
+       id="g528">
+	<circle
+   cx="208.237"
+   cy="526.31299"
+   r="33"
+   id="circle530"
+   sodipodi:cx="208.237"
+   sodipodi:cy="526.31299"
+   sodipodi:rx="33"
+   sodipodi:ry="33"
+   style="fill:none;stroke:#4d4d4d;stroke-width:5" />
+
+	
+		<linearGradient
+   id="linearGradient4224"
+   gradientUnits="userSpaceOnUse"
+   x1="75.028801"
+   y1="295.53601"
+   x2="50.257301"
+   y2="295.53601"
+   gradientTransform="matrix(-4.37114e-8,-1,1,-4.37114e-8,-87.2979,585.956)">
+		<stop
+   offset="0"
+   style="stop-color: rgb(77, 77, 77);"
+   id="stop4226" />
+
+		<stop
+   offset="1"
+   style="stop-color: rgb(0, 0, 0);"
+   id="stop4228" />
+
+	</linearGradient>
+
+	<polygon
+   points="192.523,535.699 208.238,510.928 223.952,535.699 192.523,535.699 "
+   id="polygon537"
+   style="fill:url(#SVGID_58_)" />
+
+</g>
+  </g>
+</svg>

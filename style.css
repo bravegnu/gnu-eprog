@@ -1,0 +1,50 @@
+pre, .literal {
+	font-family: dejavusansmono, courier, monospace;
+	font-size: 110%;
+}
+
+body {
+	font-family: serif;
+}
+
+.screen {
+	background-color: #eeeeee;
+	border: thin solid #cccccc;
+	padding: 10px 10px 10px 10px;
+}
+
+.title, .author {
+	color: #990000;
+	font-family: dejavusans, verdana, sans-serif;
+}
+
+.informaltable td, .informaltable th {
+	border-style: none;
+	padding: 4px
+}
+
+h1 {
+	font-size: 200%;
+}
+
+h2 {
+	font-size: 145%;
+}
+
+h3 {
+	font-size: 130%;
+}
+
+h4 {
+	font-size: 100%;
+}
+
+a img {
+	border: 0;
+}
+
+.tip, .note {
+	border: thin solid #CCCCCC;
+	padding: 1em;
+	background-color: #FFFFCC;
+}
