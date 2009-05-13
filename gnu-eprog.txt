@@ -993,6 +993,30 @@ C Startup
 
 FIXME: This section is yet to be written.
 
+[[contributing]]
+Contributing
+------------
+
+Like every other open source project, we gladly accept
+contributions. Sections that need help have been marked with
+FIXMEs. All contributions will be duly credited in the credits page.
+
+This document source is maintained a public mercurial repo located at
+http://mercurial.intuxication.org/hg/gnu-eprog Get your copy of the
+repo using the following command.
+
+------
+$ hg clone http://mercurial.intuxication.org/hg/gnu-eprog
+------
+
+You can also browse the repo at
+http://mercurial.intuxication.org/hg/gnu-eprog[http://mercurial.intuxication.org/hg/gnu-eprog]
+
+The document is written in
+http://www.methods.co.nz/asciidoc/[asciidoc], and converted to HTML
+using the http://docbook.sourceforge.net/[docbook-xsl] stylesheets. To
+contribute please send patches against the asciidoc source.
+
 [[copyright]]
 Tutorial Copyright
 ------------------
