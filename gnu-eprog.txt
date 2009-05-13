@@ -981,6 +981,18 @@ before performing a memory access. Our code works because the
 simulated memory does not require the memory controller to be
 initialized.
 
+[[exc-handle]]
+Exception Handling
+------------------
+
+FIXME: This section is yet to be written.
+
+[[c-startup]]
+C Startup
+---------
+
+FIXME: This section is yet to be written.
+
 [[copyright]]
 Tutorial Copyright
 ------------------

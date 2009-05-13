@@ -6,12 +6,12 @@ htmls = arm-iset.html \
 	using-ram.html \
 	arm-lab.html \
 	copyright.html \
-	exc-handle.html \
 	lds.html \
 	arm-prog-model.html \
-	c-startup.html \
 	hello-arm.html \
-	linker.html
+	linker.html \
+	c-startup.html \
+	exc-handle.html
 
 all: $(htmls)
 
