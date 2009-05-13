@@ -8,6 +8,7 @@ version="1.0">
 <xsl:import href="/usr/share/xml/docbook/stylesheet/nwalsh/html/chunk.xsl"/>
 
 <xsl:param name="use.id.as.filename" select="'1'"/>
+<xsl:param name="chunk.quietly" select="1"/>
 
 <xsl:param name="generate.toc">
 article   toc,title

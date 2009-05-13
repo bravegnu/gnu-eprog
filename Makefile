@@ -18,8 +18,8 @@ htmls = arm-iset.html \
 all: $(htmls)
 
 $(htmls): gnu-eprog.xml $(images)
-	xsltproc docbook.xsl  $< > $@
-	-tidy -m $(htmls)
+	xsltproc docbook.xsl  $<
+	-tidy --quiet -m $(htmls) 2> /dev/null
 
 %.xml: %.txt
 	asciidoc -b docbook  $<
