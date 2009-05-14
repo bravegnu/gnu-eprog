@@ -1069,9 +1069,9 @@ Like every other open source project, we gladly accept
 contributions. Sections that need help have been marked with
 FIXMEs. All contributions will be duly credited in the credits page.
 
-This document source is maintained a public mercurial repo located at
-http://mercurial.intuxication.org/hg/gnu-eprog Get your copy of the
-repo using the following command.
+This document's source is maintained in a public mercurial repo
+located at http://mercurial.intuxication.org/hg/gnu-eprog Get your
+copy of the repo using the following command.
 
 ------
 $ hg clone http://mercurial.intuxication.org/hg/gnu-eprog
