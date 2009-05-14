@@ -3,7 +3,7 @@ Embedded Programming with the GNU Toolchain
 :Author:          Vijay Kumar B.
 :Email:           vijaykumar@bravegnu.org
 :Author Initials: BVK
-:Revision:	  0.1.0
+:Revision:	  0.2.0
 :Key words:	  gnu, gcc, compiler, linker, lds, embedded
 :Revision history:
 
