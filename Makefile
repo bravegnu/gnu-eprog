@@ -1,4 +1,9 @@
-images = flash-ram-mm.png linker.png relocation.png sections.png
+images = flash-ram-mm.png \
+	 linker.png \
+	 relocation.png \
+	 sections.png \
+	 stack.png
+
 htmls = arm-iset.html \
 	asm-directives.html \
 	data-in-ram.html \
@@ -13,7 +18,9 @@ htmls = arm-iset.html \
 	c-startup.html \
 	exc-handle.html \
 	contributing.html \
-	credits.html
+	credits.html \
+	c-library.html \
+	arm-stacks.html
 
 all: $(htmls)
 

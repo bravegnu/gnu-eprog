@@ -5,7 +5,7 @@ result:	.space 4		@ 1 byte space for result
 
 	.text
 
-	/* Copy data to RAM. */
+	;; Copy data to RAM.
 start:	
 	ldr   r0, =flash_sdata
 	ldr   r1, =ram_sdata
@@ -17,7 +17,7 @@ copy:
 	subs  r2, r2, #1
 	bne   copy	
 
-	/* Add and store result. */
+	;; Add and store result.
 	ldr   r0, =val1	 	@ r0 = &val1
 	ldr   r1, =val2		@ r1 = &val2
 
