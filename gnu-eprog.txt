@@ -341,7 +341,7 @@ instructions present in memory. To disassemble the instructions
 located at `0x0`, the `xp` command the `fmt` specified as `4iw` can be
 used. The `4` specifies 4 items are to be displayed, `i` specifies
 that the items are to be printed as instructions (yes, a built in
-disassmbler!), `w` specifies that the items are 32 bits in size. The
+disassembler!), `w` specifies that the items are 32 bits in size. The
 output of the command is shown below.
 
 ------
@@ -982,19 +982,19 @@ a0000000:         10         30         40          0
 ------
 
 NOTE: In a real system with an SDRAM, the memory should not be
-accessed right-away. The memory controller will have to be initialized
+accessed right-away. The memory controller will have to be initialised
 before performing a memory access. Our code works because the
 simulated memory does not require the memory controller to be
-initialized.
+initialised.
 
 [[exc-handle]]
 Exception Handling
 ------------------
 
 The examples given so far have a major bug. The first 8 words in the
-memory map are reserved for the execption vectors. When an exception
+memory map are reserved for the exception vectors. When an exception
 occurs the control is transferred to one these 8 locations. The
-exceptions and their execption vector addresses are show in the
+exceptions and their exception vector addresses are show in the
 following table.
 
 .Exception Vector Addresses
@@ -1250,12 +1250,12 @@ instructions, based on the state of the condition flags. In ARM,
 almost all instructions have can be conditionally executed.
 
 If corresponding condition is true, the instruction is executed. If
-the codition is false, the instruction is turned into a `nop`. The
+the condition is false, the instruction is turned into a `nop`. The
 condition is specified by suffixing the instruction with a condition
-code mneumonic.
+code mnemonic.
 
 `-----------------`-------------------------------
-Mneumonic         Condition
+Mnemonic          Condition
 --------------------------------------------------
 EQ		  Equal
 NE		  Not Equal
