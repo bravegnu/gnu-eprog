@@ -1,0 +1,6 @@
+set ftp:ssl-allow no
+open bravegnu.org
+user bravegnu
+mirror --parallel=4 --exclude=.hg --verbose=3 -R /home/vijaykumar/projects/gnu-eprog/ /public_html/gnu-eprog/
+!touch .last
+exit

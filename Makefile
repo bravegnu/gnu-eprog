@@ -42,3 +42,6 @@ clean:
 
 distclean: clean
 	find . -name "*~" -exec rm -f {} ";"
+
+upload:
+	lftp -f upload.lftp
