@@ -12,15 +12,16 @@ Introduction
 ------------
 
 The GNU toolchain is increasingly being used for deeply embedded
-software development, also called standalone C programming and bare
-metal C programming. Standalone C programming brings along with it new
-problems, and dealing with them requires an even deeper understanding
-of the GNU toolchain. The GNU toolchain's manuals provide excellent
-information on the toolchain, but from the perspective of the
-toolchain, rather than the perspective of the problem. Well, that is
-how manuals are supposed to be written anyway. The result is that the
-answers to common problems are scattered all over, and new users of
-the GNU toolchain are left baffled.
+software development. This type of software development is also called
+standalone C programming and bare metal C programming. Standalone C
+programming brings along with it new problems, and dealing with them
+requires a deeper understanding of the GNU toolchain. The GNU
+toolchain's manuals provide excellent information on the toolchain,
+but from the perspective of the toolchain, rather than the perspective
+of the problem. Well, that is how manuals are supposed to be written
+anyway. The result is that the answers to common problems are
+scattered all over, and new users of the GNU toolchain are left
+baffled.
 
 This tutorial attempts to bridge the gap by explaining the tools from
 the perspective of the problem. Hopefully, this should enable more
@@ -1283,6 +1284,12 @@ a0000018:         33
 [[c-library]]
 Using the C Library
 -------------------
+
+FIXME: This section is yet to be written.
+
+[[inline-assembly]]
+Inline Assembly
+---------------
 
 FIXME: This section is yet to be written.
 

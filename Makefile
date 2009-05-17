@@ -21,6 +21,7 @@ htmls = arm-iset.html \
 	contributing.html \
 	credits.html \
 	c-library.html \
+	inline-assembly.html \
 	arm-stacks.html
 
 all: $(htmls)
