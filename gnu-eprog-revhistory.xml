@@ -14,4 +14,11 @@
     <revremark>Created C startup section. Improvised introduction section.</revremark>
   </revision>
 
+  <revision>
+    <revnumber>0.3.0</revnumber>
+    <date>17 May 2009</date>
+    <authorinitials>BVK</authorinitials>
+    <revremark>Added placement of read-only data, when compiling C programs.</revremark>
+  </revision>
+
 </revhistory>
