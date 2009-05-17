@@ -525,8 +525,7 @@ following operations.
   1. Symbol Resolution
   2. Relocation
 
-We will look into these operations, in greater detail, in the
-following sections.
+We will look into these operations, in detail, in this section.
 
 Symbol Resolution
 ~~~~~~~~~~~~~~~~~
@@ -598,8 +597,8 @@ Relocation
 
 Relocation is the process of changing addresses already assigned to
 labels. This will also involve patching up all label references to
-reflect the newly assigned address. Relocation is performed for two
-primary reasons.
+reflect the newly assigned address. Primarily, relocation is performed
+for the following two reasons:
 
   1. Section Merging
   2. Section Placement
@@ -617,7 +616,7 @@ used to switch back and forth between the two sections.
 
 It helps to imagine each section as a bucket. When the assembler hits
 a section directive, it puts the code/data following the directive in
-the appropriate bucket. Thus the code/data that belong to particular
+the selected bucket. Thus the code/data that belong to particular
 section appear in contiguous locations. The following figures shows
 how the assembler re-arranges data into sections.
 
@@ -674,8 +673,9 @@ Section Placement
 When a program is assembled, each section is assumed to start from
 address 0. And thus labels are assigned values relative to start of
 the section. When the final executable is created, the section is
-placed at some address X, and references to the labels are incremented
-by X, so that they point to the new location.
+placed at some address X. And all references to the labels defined
+within the section, are incremented by X, so that they point to the
+new location.
 
 The placement of each section at a particular location in memory and
 the patching of all references to the labels in the section, is done
