@@ -2,7 +2,8 @@ images = flash-ram-mm.png \
 	 linker.png \
 	 relocation.png \
 	 sections.png \
-	 stack.png
+	 stack.png \
+	 csections.png
 
 htmls = arm-iset.html \
 	asm-directives.html \
@@ -37,3 +38,6 @@ $(htmls): gnu-eprog.xml $(images)
 clean:
 	rm -f *.html
 	rm -f $(images)
+
+distclean: clean
+	find . -name "*~" -exec rm -f {} ";"

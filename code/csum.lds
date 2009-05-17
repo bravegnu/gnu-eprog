@@ -4,6 +4,9 @@ SECTIONS {
 	      * (vectors);
 	      * (.text); 
 	}
+	.rodata : {
+	      * (.rodata);
+	}
 	flash_sdata = .;
 
 	. = 0xA0000000;

@@ -1087,6 +1087,8 @@ array as an example. And by the end of the section will be able
 perform the necessary setup, transfer control to the C code and
 execute it.
 
+[[csum]]
+.Sum of Array in C
 ------
 include::code/csum.c[]
 ------
@@ -1098,6 +1100,7 @@ correctly.
   2. Global variables
      a. Initialized
      b. Uninitialized
+  3. Read-only data
 
 Stack
 ~~~~~
@@ -1151,12 +1154,23 @@ variables in the `.data` section. So just as with the assembly, the
 `.data` has to be copied from Flash to RAM.
 
 The C language guarantees that all uninitialized global variables will
-be initialized to zero. When C programs are compiled a separate
-section called `.bss` are used to store uninitialized variables. Since
-the value of these variables are all zeroes to start with, they do not
+be initialized to zero. When C programs are compiled, a separate
+section called `.bss` is used for uninitialized variables. Since the
+value of these variables are all zeroes to start with, they do not
 have to be stored in Flash. Before transferring control to C code, the
 memory locations corresponding to these variables have to be
 initialized to zero.
+
+Read-only Data
+~~~~~~~~~~~~~~
+
+GCC places global variables marked as `const` in a separate section,
+called `.rodata`. The `.rodata` is also used for storing string
+constants. 
+
+Since contents of `.rodata` section will not be modified, they can be
+placed in Flash. The linker script has to modified to accomodate
+this. 
 
 Startup Code
 ~~~~~~~~~~~~
@@ -1165,21 +1179,31 @@ Now that we know the pre-requisites we can create the linker script
 and the startup code. The linker script <<linker2>> is modified to
 accomodate the following.
 
-  1. `.bss` section placement. 
-  2. `vectors` section placement.
+  1. `.bss` section placement 
+  2. `vectors` section placement
+  3. `.rodata` section placement
 
 The `.bss` is placed right after `.data` section in RAM. Symbols to
 locate the start of `.bss` and end of `.bss` are also created in the
-linker script.
+linker script. The `.rodata` is placed right after `.text` section in
+Flash. The following diagram shows the placement of the various
+sections.
+
+.Section Placement
+image::csections.png[]
 
 .Linker Script for C code
 ------
 include::code/csum.lds[]
 ------
 
-The startup code has the exception vectors, code to copy the `.data`
-from Flash to RAM, code to zero out the `.bss`, code to setup the
-stack pointer, and a branch to main.
+The startup code has the following parts
+
+    1. exception vectors
+    2. code to copy the `.data` from Flash to RAM
+    3. code to zero out the `.bss`
+    4. code to setup the stack pointer
+    5. branch to main
 
 .C Startup Assembly
 ------
@@ -1190,14 +1214,16 @@ To compile the code, it is not necessary to invoke the assembler,
 compiler and linker individually. `gcc` is intelligent enough to do
 that for us. 
 
+As promised before, we will compile and execute the C code shown
+in <<csum>>.
+
 ------
 $ arm-none-eabi-gcc -nostdlib -o csum.elf -T csum.lds csum.c startup.s
 ------
 
 The `-nostdlib` option is used to specify that the standard C library
 should not be linked in. A little extra care has to be taken when the
-C library is linked in. This is discussed in the next section
-<<c-library>>.
+C library is linked in. This is discussed in <<c-library>>.
 
 A dump of the symbol table will give a better picture of how things
 have been placed in memory.
@@ -1213,17 +1239,18 @@ $ arm-none-eabi-nm -n csum.elf
 00000018 A data_size
 00000018 t irq
 0000001c t fiq
-00000020 t start	<2>
-0000002c t copy
-0000004c t zero
-00000060 t stop
-00000078 T main
-000000e8 A flash_sdata
-a0000000 d arr		<3>
+00000020 T main
+00000090 t start	<2>
+0000009c t copy
+000000bc t zero
+000000d0 t stop
+000000ec r n		<3>
+000000f0 A flash_sdata
+a0000000 d arr		<4>
 a0000000 A ram_sdata
 a0000018 A ram_edata
 a0000018 A sbss
-a0000018 b sum		<4>
+a0000018 b sum		<5>
 a000001c A ebss
 ------
 <1> `reset` and the rest of the exception vectors are placed starting from `0x0`.
@@ -1231,14 +1258,16 @@ a000001c A ebss
 <2> The assembly code is placed right after the 8 exception vectors
     (`8 * 4 = 32 = 0x20`).
 
-<3> The initialized data `arr`, an array of 6 integers, is placed at
+<3> The read-only data `n`, is placed in Flash after the code.
+
+<4> The initialized data `arr`, an array of 6 integers, is placed at
     the start of RAM `0xA0000000`.
 
-<4> The uninitialized data `sum` is placed after the array of 6
+<5> The uninitialized data `sum` is placed after the array of 6
     integers. (`6 * 4 = 24 = 0x18`)
 
-Convert the program to `.bin` format, execute in Qemu, and dump the
-`sum` variable located at `0xA0000018`.
+To execute the program, convert the program to `.bin` format, execute
+in Qemu, and dump the `sum` variable located at `0xA0000018`.
 
 ------
 $ arm-none-eabi-objcopy -O binary csum.elf csum.bin
