@@ -1242,11 +1242,13 @@ $ arm-none-eabi-nm -n csum.elf
 0000001c t fiq
 00000020 T main
 00000090 t start	<2>
-0000009c t copy
-000000bc t zero
-000000d0 t stop
-000000ec r n		<3>
-000000f0 A flash_sdata
+000000a0 t copy
+000000b0 t init_bss
+000000c4 t zero
+000000d0 t init_stack
+000000d8 t stop
+000000f4 r n		<3>
+000000f8 A flash_sdata
 a0000000 d arr		<4>
 a0000000 A ram_sdata
 a0000018 A ram_edata
