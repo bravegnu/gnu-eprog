@@ -146,6 +146,7 @@ Here is a very simple ARM assembly program to add two numbers.
 
 [[add]]
 .Adding Two Numbers
+[lang="armasm"]
 ------
 	.text                
 start:                       @ Label, not really required
@@ -384,6 +385,7 @@ The following code sums an array of bytes and stores the result in
 `r3`.
 
 .Sum an Array
+[lang="armasm"]
 ------
 include::code/sum.s[]
 ------
@@ -439,6 +441,7 @@ The following code calculates the length of string and stores the
 length in register `r1`.
 
 .String Length
+[lang="armasm"]
 ------
 include::code/strlen.s[]
 ------
@@ -550,12 +553,14 @@ source of the files is shown below.
 
 [[l1]]
 .`main.s` - Subroutine Invocation
+[lang="armasm"]
 ------
 include::code/main.s[]
 ------
 
 [[l2]]
 .`sum-sub.s` - Subroutine Definition
+[lang="armasm"]
 ------
 include::code/sum-sub.s[]
 ------
@@ -790,6 +795,7 @@ script shown in <<linker1>> to control placement a program's `.text`
 and `.data` section. We will use a slightly modified version of the
 sum of array program for this purpose. The code is shown below.
 
+[lang="armasm"]
 ----
 include::code/sum-data.s[]
 ----
@@ -839,6 +845,7 @@ store the result back to RAM. The two values and the space for result
 is placed in the `.data` section.
 
 .Add Data in RAM
+[lang="armasm"]
 ------
 include::code/add-mem.s[]
 ------
@@ -987,6 +994,7 @@ linker script.
 The add program with data copied to RAM from Flash is listed below.
 
 .Add Data in RAM (with copy)
+[lang="armasm"]
 ------
 include::code/add-ram.s[]
 ------
@@ -1090,6 +1098,7 @@ execute it.
 
 [[csum]]
 .Sum of Array in C
+[lang="cpp"]
 ------
 include::code/csum.c[]
 ------
@@ -1207,6 +1216,7 @@ The startup code has the following parts
     5. branch to main
 
 .C Startup Assembly
+[lang="armasm"]
 ------
 include::code/startup.s[]
 ------
@@ -1621,3 +1631,13 @@ value.
 Four different stacks are possible - full-ascending, full-descending,
 empty-ascending, empty-descending. All 4 can be implemented using the
 register load store instructions.
+
+[[pxa255-regs]]
+Appendix C: PXA255 Register Defintion
+-------------------------------------
+
+.pxa255 Header
+[lang="cpp"]
+------
+include::code/pxa255.h[]
+------

@@ -104,4 +104,55 @@ where the code starts and where it ends. -->
 
 <xsl:param name="admon.graphics.extension" select="'.png'"></xsl:param>
 <xsl:param name="navig.graphics.extension" select="'.png'"></xsl:param>
+
+
+<xsl:template match="programlisting|screen|synopsis">
+  <xsl:param name="suppress-numbers" select="'0'"/>
+  <xsl:variable name="id">
+    <xsl:call-template name="object.id"/>
+  </xsl:variable>
+
+  <xsl:call-template name="anchor"/>
+
+  <xsl:if test="$shade.verbatim != 0">
+    <xsl:message>
+      <xsl:text>The shade.verbatim parameter is deprecated. </xsl:text>
+      <xsl:text>Use CSS instead,</xsl:text>
+    </xsl:message>
+    <xsl:message>
+      <xsl:text>for example: pre.</xsl:text>
+      <xsl:value-of select="local-name(.)"/>
+      <xsl:text> { background-color: #E0E0E0; }</xsl:text>
+    </xsl:message>
+  </xsl:if>
+
+  <xsl:choose>
+    <xsl:when test="$suppress-numbers = '0'
+		    and @linenumbering = 'numbered'
+		    and $use.extensions != '0'
+		    and $linenumbering.extension != '0'">
+      <xsl:variable name="rtf">
+	<xsl:call-template name="apply-highlighting"/>
+      </xsl:variable>
+      <pre class="{name(.)}"><code class="{@language}">
+	<xsl:call-template name="number.rtf.lines">
+	  <xsl:with-param name="rtf" select="$rtf"/>
+	</xsl:call-template>
+      </code></pre>
+    </xsl:when>
+    <xsl:otherwise>
+      <pre class="{name(.)}"><code class="{@language}">
+	<xsl:call-template name="apply-highlighting"/>
+      </code></pre>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template name="user.head.content">
+<script type="text/javascript" src="highlight.pack.js"></script>
+<script type="text/javascript">
+hljs.initHighlightingOnLoad();
+</script>
+</xsl:template>
+
 </xsl:stylesheet>

@@ -1,16 +1,10 @@
-pre, .literal {
+.literal {
 	font-family: dejavusansmono, courier, monospace;
 	font-size: 110%;
 }
 
 body {
 	font-family: serif;
-}
-
-.screen {
-	background-color: #eeeeee;
-	border: thin solid #cccccc;
-	padding: 10px 10px 10px 10px;
 }
 
 .title, .author {
@@ -54,4 +48,100 @@ a img {
 	border: thin solid #CCCCCC;
 	padding: 1em;
 	background-color: #FFFFCC;
+}
+
+pre code {
+  font-family: dejavusansmono, courier, monospace;
+  display: block;
+  background: #eeeeee;
+  border: thin solid #cccccc;
+  font-size: 140%;
+  padding: 0.5em;
+}
+
+pre code,
+.ruby .subst,
+.xml .title,
+.lisp .title {
+  color: black;
+}
+
+.string,
+.title,
+.parent,
+.tag .attribute .value,
+.rules .value,
+.rules .value .number,
+.preprocessor,
+.ruby .symbol,
+.instancevar,
+.aggregate,
+.template_tag,
+.django .variable,
+.smalltalk .class,
+.addition,
+.flow,
+.stream,
+.bash .variable,
+.apache .tag,
+.apache .cbracket {
+  color: #800;
+}
+
+.comment,
+.annotation,
+.template_comment,
+.diff .header,
+.chunk {
+  color: #888;
+}
+
+.number,
+.date,
+.regexp,
+.literal,
+.smalltalk .symbol,
+.smalltalk .char,
+.change {
+  color: #080;
+}
+
+.label,
+.javadoc,
+.ruby .string,
+.decorator,
+.filter .argument,
+.localvars,
+.array,
+.attr_selector,
+.pi,
+.doctype,
+.deletion,
+.envvar,
+.shebang,
+.apache .sqbracket {
+  color: #88F;
+}
+
+.keyword,
+.id,
+.phpdoc,
+.title,
+.vbscript .built_in,
+.rsl .built_in,
+.cpp .built_in,
+.avrasm .built_in,
+.armasm .built_in,
+.aggregate,
+.smalltalk .class,
+.winutils,
+.bash .variable,
+.apache .tag {
+  font-weight: bold;
+}
+
+.html .css,
+.html .javascript,
+.html .vbscript {
+  opacity: 0.5;
 }

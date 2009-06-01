@@ -26,7 +26,7 @@ htmls = arm-iset.html \
 
 all: $(htmls)
 
-$(htmls): gnu-eprog.xml $(images)
+$(htmls): gnu-eprog.xml $(images) highlight.pack.js
 	xsltproc docbook.xsl  $<
 	imgsizer $(htmls)
 	-tidy --quiet -m $(htmls) 2> /dev/null
@@ -37,8 +37,12 @@ $(htmls): gnu-eprog.xml $(images)
 %.png: %.dia
 	dia --export=$@ --filter=png-libart $<
 
+highlight.pack.js: highlight.js
+	cat highlight.js | python jsmin.py > highlight.pack.js
+
 clean:
 	rm -f *.html
+	rm -f gnu-eprog.xml
 	rm -f $(images)
 
 distclean: clean
