@@ -1353,11 +1353,12 @@ of the tutorial.
   1. http://www.methods.co.nz/asciidoc/[asciidoc] for lightweight markup
   2. http://www.xmlsoft.org/XSLT/xsltproc2.html[xsltproc] for HTML transformation
   3. http://docbook.sourceforge.net/[docbook-xsl] for the stylesheets
-  4. http://www.gnome.org/projects/dia/[dia] for diagram creation
-  5. http://www.gosquared.com/liquidicity/archives/611[GoSquared Arrow
+  4. http://softwaremaniacs.org/soft/highlight/en/[highlight.js] for syntax highlighting
+  5. http://www.gnome.org/projects/dia/[dia] for diagram creation
+  6. http://www.gosquared.com/liquidicity/archives/611[GoSquared Arrow
      Icons] for the navigation icons
-  6. http://www.selenic.com/mercurial/[mercurial] for version control
-  7. http://www.gnu.org/software/emacs/[emacs] ...
+  7. http://www.selenic.com/mercurial/[mercurial] for version control
+  8. http://www.gnu.org/software/emacs/[emacs] ...
 
 [[copyright]]
 Tutorial Copyright
