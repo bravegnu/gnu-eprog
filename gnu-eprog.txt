@@ -1632,12 +1632,3 @@ Four different stacks are possible - full-ascending, full-descending,
 empty-ascending, empty-descending. All 4 can be implemented using the
 register load store instructions.
 
-[[pxa255-regs]]
-Appendix C: PXA255 Register Defintion
--------------------------------------
-
-.pxa255 Header
-[lang="cpp"]
-------
-include::code/pxa255.h[]
-------
