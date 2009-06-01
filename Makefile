@@ -24,12 +24,15 @@ htmls = arm-iset.html \
 	inline-assembly.html \
 	arm-stacks.html
 
-all: $(htmls)
+all: $(htmls) $(images) highlight.pack.js revision.rss
 
-$(htmls): gnu-eprog.xml $(images) highlight.pack.js
+$(htmls): gnu-eprog.xml 
 	xsltproc docbook.xsl  $<
 	imgsizer $(htmls)
 	-tidy --quiet -m $(htmls) 2> /dev/null
+
+revision.rss: gnu-eprog.xml
+	xsltproc rss.xsl gnu-eprog.xml | tr -s "\n" > revision.rss
 
 %.xml: %.txt
 	asciidoc -b docbook  $<
