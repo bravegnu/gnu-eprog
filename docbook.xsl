@@ -149,6 +149,7 @@ where the code starts and where it ends. -->
 </xsl:template>
 
 <xsl:template name="user.head.content">
+<link href="revision.rss" type="application/rss+xml" rel="alternate" title="Revision updates" />
 <script type="text/javascript" src="highlight.pack.js"></script>
 <script type="text/javascript">
 hljs.initHighlightingOnLoad();
