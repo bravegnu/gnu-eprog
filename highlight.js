@@ -576,7 +576,7 @@ hljs.LANGUAGES.armasm =
     },
     {
       className: 'preprocessor',
-      begin: '\\.[a-zA-Z]+', end: '^'
+      begin: '\\.[a-zA-Z0-9]+', end: '^'
     },
     {
       className: 'localvars',
