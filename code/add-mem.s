@@ -1,7 +1,7 @@
 	.data
 val1:	.4byte 10		@ First number
 val2:	.4byte 30		@ Second number
-result:	.4byte 0		@ 1 byte space for result
+result:	.4byte 0		@ 4 byte space for result
 
 	.text
 	.align

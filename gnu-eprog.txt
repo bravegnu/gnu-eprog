@@ -3,7 +3,7 @@ Embedded Programming with the GNU Toolchain
 :Author:          Vijay Kumar B.
 :Email:           vijaykumar@bravegnu.org
 :Author Initials: BVK
-:Revision:	  0.3.0
+:Revision:	  0.4.0
 :Key words:	  gnu, gcc, compiler, linker, lds, embedded, microcontroller, arm
 :Revision history:
 
@@ -1341,8 +1341,12 @@ Credits
 People
 ~~~~~~
 
-The original tutorial was written by Vijay Kumar B.,
-<vijaykumar@bravegnu.org>
+  * The original tutorial was written by Vijay Kumar B.,
+    <vijaykumar@bravegnu.org>
+
+  * Jesus Vicenti reported bugs in the code.
+
+  * Goodwealth Chu reported bugs in the code.
 
 Tools
 ~~~~~
@@ -1362,8 +1366,8 @@ of the tutorial.
 [[copyright]]
 Tutorial Copyright
 ------------------
-"Embedded Programming with the GNU Toolchain" is Copyright (C) 2009
-Vijay Kumar B. <vijaykumar@bravegnu.org>
+"Embedded Programming with the GNU Toolchain" is Copyright (C) 2009,
+2010, 2011 Vijay Kumar B. <vijaykumar@bravegnu.org>
 
 This work is licensed under a
 http://creativecommons.org/licenses/by-sa/3.0/[Creative Commons
