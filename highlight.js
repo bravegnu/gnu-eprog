@@ -552,7 +552,7 @@ hljs.LANGUAGES.armasm =
     hljs.C_BLOCK_COMMENT_MODE,
     {
       className: 'comment',
-      begin: '@',  end: '$'
+      begin: '@|;',  end: '$'
     },
     hljs.BACKSLASH_ESCAPE,
     hljs.QUOTE_STRING_MODE,
@@ -562,10 +562,6 @@ hljs.LANGUAGES.armasm =
       illegal: '[^\\\\][^\']'
     },
     hljs.C_NUMBER_MODE,
-    /*{  // Hex: 0x00;  Oct: 0nn;  Bin: 0b00000000;  Dec: 0
-      className: 'number',
-      begin: '#?(0[xX][A-Fa-f0-9]+|0[0-7]+|0[bB][0-1]+|\\d+)',  end: '^'
-    }*/
     {
       className: 'label',
       begin: '^[A-Za-z0-9_.$]+:',  end: '^'
