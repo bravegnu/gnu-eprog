@@ -278,7 +278,7 @@ $ dd if=/dev/zero of=flash.bin bs=4096 count=4096
 the following command.
 
 ------
-$ dd if=add.bin of=flash.bin bs=4096
+$ dd if=add.bin of=flash.bin bs=4096 conv=notrunc
 ------
 
 This is the equivalent of programming the `bin` file on to the Flash
@@ -1284,7 +1284,7 @@ in Qemu, and dump the `sum` variable located at `0xA0000018`.
 
 ------
 $ arm-none-eabi-objcopy -O binary csum.elf csum.bin
-$ dd if=csum.bin of=flash.bin bs=4096
+$ dd if=csum.bin of=flash.bin bs=4096 conv=notrunc
 $ qemu-system-arm -M connex -pflash flash.bin -nographic -serial /dev/null
 (qemu) xp /6dw 0xa0000000
 a0000000:          1         10          4          5
