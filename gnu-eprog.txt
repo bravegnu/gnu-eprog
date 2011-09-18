@@ -1344,9 +1344,8 @@ People
   * The original tutorial was written by Vijay Kumar B.,
     <vijaykumar@bravegnu.org>
 
-  * Jesus Vicenti reported bugs in the code.
-
-  * Goodwealth Chu reported bugs in the code.
+  * Jesus Vicenti, Goodwealth Chu, Jeffrey Antony, Jonathan Grant,
+    David LeBlanc, reported typos in the code and text.
 
 Tools
 ~~~~~

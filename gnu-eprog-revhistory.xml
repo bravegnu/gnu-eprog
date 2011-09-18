@@ -28,4 +28,11 @@
     <revremark>Code fixes reported by Goodwealth Chu and Jesus Vicenti</revremark>
   </revision>
 
+  <revision>
+    <revnumber>0.5.0</revnumber>
+    <date>Sun, 19 Sep 2011 00:00:00 +0530</date>
+    <authorinitials>BVK</authorinitials>
+    <revremark>Typo fixes reported by Jeffrey Antony, Jonathan Grant and David LeBlanc.</revremark>
+  </revision>
+
 </revhistory>
