@@ -429,10 +429,10 @@ nalpha:   .byte 'Z' - 'A' + 1
 
 ARM requires that the instructions be present in 32-bit aligned memory
 locations. The address of the first byte, of the 4 bytes in an
-instruction instruction, should be a multiple of 4. To adhere to this,
-the `.align` directive can be used to insert padding bytes till the
-next byte address will be a multiple of 4. This is required only when
-data bytes or half words are inserted within code.
+instruction, should be a multiple of 4. To adhere to this, the
+`.align` directive can be used to insert padding bytes till the next
+byte address will be a multiple of 4. This is required only when data
+bytes or half words are inserted within code.
 
 String Length
 ~~~~~~~~~~~~~
