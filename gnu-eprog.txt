@@ -1159,7 +1159,7 @@ decremented first and the value will be stored.
 Global Variables
 ~~~~~~~~~~~~~~~~
 
-Whe C code is compiled, the compiler places initialized global
+When C code is compiled, the compiler places initialized global
 variables in the `.data` section. So just as with the assembly, the
 `.data` has to be copied from Flash to RAM.
 
