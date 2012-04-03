@@ -90,10 +90,10 @@ $ apt-get -t etch-backports install qemu
 Installing GNU Toolchain for ARM
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  1. Folks at codesourcery.com have been kind enough to make GNU
+  1. Folks at CodeSourcery (part of Mentor Graphics) have been kind enough to make GNU
      toolchains available for various architectures. Download the GNU
      toolchain for ARM, available from from
-     http://www.codesourcery.com/gnu_toolchains/arm
+     http://www.mentor.com/embedded-software/sourcery-tools/sourcery-codebench/editions/lite-edition/
 +
   2. Extract the tar archive, to `~/toolchains`.
 +
@@ -1344,8 +1344,9 @@ People
   * The original tutorial was written by Vijay Kumar B.,
     <vijaykumar@bravegnu.org>
 
-  * Jesus Vicenti, Goodwealth Chu, Jeffrey Antony, Jonathan Grant,
-    David LeBlanc, reported typos in the code and text.
+  * Jim Huang, Jesus Vicenti, Goodwealth Chu, Jeffrey Antony,
+    Jonathan Grant, David LeBlanc, reported typos and suggested
+    fixes in the code and text.
 
 Tools
 ~~~~~
