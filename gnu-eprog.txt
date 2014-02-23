@@ -1313,26 +1313,13 @@ Like every other open source project, we gladly accept
 contributions. Sections that need help have been marked with
 FIXMEs. All contributions will be duly credited in the credits page.
 
-This document's source is maintained in a public mercurial repo
-located at http://mercurial.intuxication.org/hg/gnu-eprog Get your
-copy of the repo using the following command.
-
-------
-$ hg clone http://mercurial.intuxication.org/hg/gnu-eprog
-------
-
-If you are not familiar with mercurial, you can grab the latest source
-from
-http://mercurial.intuxication.org/hg/gnu-eprog/archive/tip.tar.bz2[http://mercurial.intuxication.org/hg/gnu-eprog/archive/tip.tar.bz2]
-You can also browse the repo at
-http://mercurial.intuxication.org/hg/gnu-eprog[http://mercurial.intuxication.org/hg/gnu-eprog]
+This document's source is maintained in a public git repo located at
+https://github.com/bravegnu/gnu-eprog To contribute to the project,
+fork the project on github and send in a pull request.
 
 The document is written in
 http://www.methods.co.nz/asciidoc/[asciidoc], and converted to HTML
-using the http://docbook.sourceforge.net/[docbook-xsl] stylesheets. 
-
-Please send patches against the asciidoc source to Vijay Kumar B.,
-<vijaykumar@bravegnu.org>.
+using the http://docbook.sourceforge.net/[docbook-xsl] stylesheets.
 
 [[credits]]
 Credits
