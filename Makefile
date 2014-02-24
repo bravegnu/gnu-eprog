@@ -24,10 +24,15 @@ htmls = arm-iset.html \
 	inline-assembly.html \
 	arm-stacks.html
 
-all: $(htmls) $(images) highlight.pack.js revision.rss
+all: $(htmls) $(images) revision.rss
+
+gnu-eprog.fo: gnu-eprog.xml
+	xsltproc -o $@ /usr/share/xml/docbook/stylesheet/nwalsh/fo/docbook.xsl $<
 
 $(htmls): gnu-eprog.xml 
-	xsltproc docbook.xsl  $<
+	java -cp "/usr/share/java/saxon.jar:/usr/share/java/xslthl.jar" \
+	  -Dxslthl.config="file://$(PWD)/xslthl-config.xml"             \
+	  com.icl.saxon.StyleSheet gnu-eprog.xml docbook.xsl
 	imgsizer $(htmls)
 	-tidy --quiet -m $(htmls) 2> /dev/null
 
@@ -39,9 +44,6 @@ revision.rss: gnu-eprog.xml
 
 %.png: %.dia
 	dia --export=$@ --filter=png-libart $<
-
-highlight.pack.js: highlight.js
-	cat highlight.js | python jsmin.py > highlight.pack.js
 
 clean:
 	rm -f *.html

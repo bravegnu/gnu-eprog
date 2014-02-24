@@ -1098,7 +1098,7 @@ execute it.
 
 [[csum]]
 .Sum of Array in C
-[lang="cpp"]
+[lang="c"]
 ------
 include::code/csum.c[]
 ------

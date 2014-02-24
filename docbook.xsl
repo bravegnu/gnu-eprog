@@ -6,6 +6,7 @@ xmlns:fo="http://www.w3.org/1999/XSL/Format"
 version="1.0">
 
 <xsl:import href="/usr/share/xml/docbook/stylesheet/nwalsh/html/chunk.xsl"/>
+<xsl:import href="/usr/share/xml/docbook/stylesheet/nwalsh/html/highlight.xsl"/>
 
 <xsl:param name="use.id.as.filename" select="'1'"/>
 <xsl:param name="chunk.quietly" select="1"/>
@@ -91,6 +92,10 @@ procedure before
   </l:l10n>
 </l:i18n>
 
+<!-- Source Highlight -->
+
+<xsl:param name="highlight.source" select="1"></xsl:param>
+
 <!-- A grey background for our listings, gives a better indication of
 where the code starts and where it ends. -->
 
@@ -104,7 +109,6 @@ where the code starts and where it ends. -->
 
 <xsl:param name="admon.graphics.extension" select="'.png'"></xsl:param>
 <xsl:param name="navig.graphics.extension" select="'.png'"></xsl:param>
-
 
 <xsl:template match="programlisting|screen|synopsis">
   <xsl:param name="suppress-numbers" select="'0'"/>
@@ -150,10 +154,6 @@ where the code starts and where it ends. -->
 
 <xsl:template name="user.head.content">
 <link href="revision.rss" type="application/rss+xml" rel="alternate" title="Revision updates" />
-<script type="text/javascript" src="highlight.pack.js"></script>
-<script type="text/javascript">
-hljs.initHighlightingOnLoad();
-</script>
 </xsl:template>
 
 </xsl:stylesheet>
