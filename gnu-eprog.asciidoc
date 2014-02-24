@@ -621,7 +621,7 @@ used to switch back and forth between the two sections.
 It helps to imagine each section as a bucket. When the assembler hits
 a section directive, it puts the code/data following the directive in
 the selected bucket. Thus the code/data that belong to particular
-section appear in contiguous locations. The following figures shows
+section appear in contiguous locations. The following figures show
 how the assembler re-arranges data into sections.
 
 .Sections
@@ -635,10 +635,10 @@ Section Merging
 
 When dealing with multi-file programs, the sections with the same name
 (example `.text`) might appear, in each file. The linker is
-responsible for merging the sections from the input files, into
-sections of the output file. By default, the sections, with the same
-name, from each file is placed contiguously and the label references
-are patched to reflect the new address.
+responsible for merging sections from the input files, into sections
+of the output file. By default, the sections, with the same name, from
+each file is placed contiguously and the label references are patched
+to reflect the new address.
 
 The effects of section merging can be seen by looking at the symbol
 table of the object files and the corresponding executable file. The
@@ -747,9 +747,9 @@ SECTIONS { <1>
 }
 ------
 
-<1> The `SECTIONS` command is the most import linker command, it specifies
-how the sections are to be merged and at what location they are to be
-placed. 
+<1> The `SECTIONS` command is the most important linker command, it
+specifies how the sections are to be merged and at what location they
+are to be placed.
 
 <2> Within the block following the `SECTIONS` command, the `.`
 (period) represents the location counter. The location is always
@@ -790,9 +790,9 @@ Linker Script Example
 ~~~~~~~~~~~~~~~~~~~~~
 
 To demonstrate the use of linker scripts, we will use the linker
-script shown in <<linker1>> to control placement a program's `.text`
-and `.data` section. We will use a slightly modified version of the
-sum of array program for this purpose. The code is shown below.
+script shown in <<linker1>> to control the placement of a program's
+`.text` and `.data` section. We will use a slightly modified version
+of the sum of array program for this purpose. The code is shown below.
 
 [lang="armasm"]
 ----
@@ -888,7 +888,7 @@ Address.).
 The following two modifications have to be done, to make the program
 work correctly.
 
-  1. The linker script has to be modified to specify the both the load
+  1. The linker script has to be modified to specify both the load
      address and the run-time address, for the `.data` section.
 
   2. A small piece of code should copy the `.data` section from Flash
@@ -1116,7 +1116,7 @@ Stack
 
 C uses the stack for storing local (auto) variables, passing function
 arguments, storing return address, etc. So it is essential that the
-stack is setup correctly, before transferring control to C code.
+stack be setup correctly, before transferring control to C code.
 
 Stacks are highly flexible in the ARM architecture, since the
 implementation is completely left to the software. For people not
