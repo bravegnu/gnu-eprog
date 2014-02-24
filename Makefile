@@ -39,7 +39,7 @@ $(htmls): gnu-eprog.xml
 revision.rss: gnu-eprog.xml
 	xsltproc rss.xsl gnu-eprog.xml | tr -s "\n" > revision.rss
 
-%.xml: %.txt
+%.xml: %.asciidoc
 	asciidoc -b docbook  $<
 
 %.png: %.dia
