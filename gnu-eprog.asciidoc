@@ -130,7 +130,7 @@ Each of the components is optional.
 `label`::
 The label is a convenient way to refer to the location of the
 instruction in memory. The label can be used where ever an address can
-appear, for example as an operand of branch instruction. The label
+appear, for example as an operand of the branch instruction. The label
 name should consist of alphabets, digits, `_` and `$`.
 
 `comment`::
@@ -354,11 +354,11 @@ asm instructions.
 
 This `xp` command with the `i` format, can be used to disassemble the
 instructions present in memory. To disassemble the instructions
-located at `0x0`, the `xp` command the `fmt` specified as `4iw` can be
-used. The `4` specifies 4 items are to be displayed, `i` specifies
-that the items are to be printed as instructions (yes, a built in
-disassembler!), `w` specifies that the items are 32 bits in size. The
-output of the command is shown below.
+located at `0x0`, the `xp` command with the `fmt` specified as `4iw`
+can be used. The `4` specifies 4 items are to be displayed, `i`
+specifies that the items are to be printed as instructions (yes, a
+built in disassembler!), `w` specifies that the items are 32 bits in
+size. The output of the command is shown below.
 
 ------
 (qemu) xp /4iw 0x0
@@ -465,11 +465,10 @@ insert a `nul` character after each string.
 ^^^^^^^^^^^^^^^^
 
 The assembler maintains something called a symbol table. The symbol
-table maps label names to an addresses. Whenever the assembler
-encounters a label definition, the assembler makes an entry in the
-symbol table. And whenever the assembler encounters a label reference,
-it replaces the label by the corresponding address from the symbol
-table.
+table maps label names to addresses. Whenever the assembler encounters
+a label definition, the assembler makes an entry in the symbol
+table. And whenever the assembler encounters a label reference, it
+replaces the label by the corresponding address from the symbol table.
 
 Using the assembler directive `.equ`, it is also possible to manually
 insert entries in the symbol table, to map names to values, which are
@@ -544,7 +543,7 @@ values.
 
 The sum of array example is split into two files, to demonstrate the
 symbol resolution performed by the linker. The two files will be
-assembled and their symbol tables examined to show the presence the
+assembled and their symbol tables examined to show the presence of
 unresolved references.
 
 The file `sum-sub.s` contains the `sum` subroutine, and the file
