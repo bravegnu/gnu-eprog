@@ -327,14 +327,14 @@ More Monitor Commands
 
 Some useful `qemu` monitor commands are listed in the following table.
 
-`-----------------`-------------------------------
-Command           Purpose
---------------------------------------------------
-`help`		  List available commands
-`quit`		  Quits the emulator
-`xp /fmt addr`	  Physical memory dump from `addr`
-`system_reset`    Reset the system.
---------------------------------------------------
+[options="header"]
+|======
+| Command         | Purpose
+| `help`	  | List available commands
+| `quit`	  | Quits the emulator
+| `xp /fmt addr`  | Physical memory dump from `addr`
+| `system_reset`  | Reset the system.
+|======
 
 The `xp` command deserves more explanation. The `fmt` argument
 specifies how the memory contents is to be displayed. The syntax of
@@ -1025,18 +1025,18 @@ exceptions and their exception vector addresses are show in the
 following table.
 
 .Exception Vector Addresses
-`------------------------`----------------
-Exception                Address
-------------------------------------------
-Reset                    0x00
-Undefined Instruction	 0x04
-Software Interrupt (SWI) 0x08
-Prefetch Abort		 0x0C
-Data Abort		 0x10
-Reserved, not used	 0x14
-IRQ			 0x18
-FIQ			 0x1C
----------------------------------------
+[options="header"]
+|======
+| Exception               | Address
+| Reset                   | 0x00
+| Undefined Instruction	  | 0x04
+| Software Interrupt (SWI)| 0x08
+| Prefetch Abort	  | 0x0C
+| Data Abort		  | 0x10
+| Reserved, not used	  | 0x14
+| IRQ			  | 0x18
+| FIQ			  | 0x1C
+|======
 
 These locations are supposed to contain a branch that will transfer
 control the appropriate exception handler. In the examples we have
@@ -1402,14 +1402,14 @@ performing arithmetic and logical operations. The various condition
 flags and their meaning are given in the following table.
 
 .Condition Flags
-`--------------`-----------------------------
-Flag           Meaning
----------------------------------------------
-Carry `C`      Operation caused a carry.
-Overflow `O`   Operation caused an overflow.
-Zero `Z`       Operation resulted in 0.
-Negative `N`   Operation resulted in a negative value.
----------------------------------------------
+[options="header"]
+|======
+| Flag         | Meaning
+| Carry `C`    | Operation caused a carry.
+| Overflow `O` | Operation caused an overflow.
+| Zero `Z`     | Operation resulted in 0.
+| Negative `N` | Operation resulted in a negative value.
+|======
 
 [[arm-iset]]
 Appendix B: ARM Instruction Set
@@ -1437,14 +1437,14 @@ The most common data processing instructions are listed in the
 following table.
 
 .Data Processing Instructions
-`---------------`---------------`----------------`-----------------
-Instruction     Operation       Example		
---------------------------------------------------------------------
-`mov rd, n`     `rd = n`        `mov r7, r5`     `; r7 = r5`
-`add rd, rn, n` `rd = rn + n`   `add r0, r0, #1` `; r0 = r0 + 1`
-`sub rd, rn, n` `rd = rn - n`   `sub r0, r2, r1` `; r0 = r2 + r1`
-`cmp rn, n`     `rn - n`        `cmp r1, r2`     `; r1 - r2`
---------------------------------------------------------------------
+[options="header"]
+|======
+| Instruction     | Operation     | Example		
+| `mov rd, n`     | `rd = n`      | `mov r7, r5`     `; r7 = r5`
+| `add rd, rn, n` | `rd = rn + n` | `add r0, r0, #1` `; r0 = r0 + 1`
+| `sub rd, rn, n` | `rd = rn - n` | `sub r0, r2, r1` `; r0 = r2 + r1`
+| `cmp rn, n`     | `rn - n`      | `cmp r1, r2`     `; r1 - r2`
+|======
 
 By default data processing instructions *do not* update the condition
 flags. Instructions will update condition flags if it is suffixed with
@@ -1490,26 +1490,26 @@ the condition is false, the instruction is turned into a `nop`. The
 condition is specified by suffixing the instruction with a condition
 code mnemonic.
 
-`-----------------`-------------------------------
-Mnemonic          Condition
---------------------------------------------------
-EQ		  Equal
-NE		  Not Equal
-CS		  Carry Set
-CC		  Carry Clear
-VC		  Overflow Clear
-VS		  Overflow Set
-PL		  Positive
-MI		  Minus
-HI		  Higher Than
-HS		  Higher or Same
-LO		  Lower Than
-LS		  Lower or Same
-GT		  Greater Than
-GE		  Greater Than or Equal
-LT		  Less Than
-LE		  Less Than or Equal
---------------------------------------------------
+[options="header"]
+|======
+| Mnemonic       | Condition
+| EQ		 | Equal
+| NE		 | Not Equal
+| CS		 | Carry Set
+| CC		 | Carry Clear
+| VC		 | Overflow Clear
+| VS		 | Overflow Set
+| PL		 | Positive
+| MI		 | Minus
+| HI		 | Higher Than
+| HS		 | Higher or Same
+| LO		 | Lower Than
+| LS		 | Lower or Same
+| GT		 | Greater Than
+| GE		 | Greater Than or Equal
+| LT		 | Less Than
+| LE		 | Less Than or Equal
+|======
 
 In the following example, the instruction moves `r1` to `r0` only if
 carry is set.
