@@ -31,7 +31,7 @@ gnu-eprog.fo: gnu-eprog.xml
 
 $(htmls): gnu-eprog.xml 
 	java -cp "/usr/share/java/saxon.jar:/usr/share/java/xslthl.jar" \
-	  -Dxslthl.config="file://$(PWD)/xslthl-config.xml"             \
+	  -Dxslthl.config="file://$(PWD)/xslthl-config.xml" \
 	  com.icl.saxon.StyleSheet gnu-eprog.xml docbook.xsl
 	imgsizer $(htmls)
 	-tidy --quiet -m $(htmls) 2> /dev/null

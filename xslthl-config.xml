@@ -28,5 +28,6 @@ Michiel Hendriks <elmuerte at users.sourceforge.net>
 -->
 <xslthl-config>
 	<highlighter id="c" file="c-hl.xml" />
+	<highlighter id="armasm" file="armasm-hl.xml" />
 	<namespace prefix="xslthl" uri="http://xslthl.sf.net" />
 </xslthl-config>

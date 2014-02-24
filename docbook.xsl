@@ -3,6 +3,7 @@
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
 xmlns:t="http://nwalsh.com/docbook/xsl/template/1.0"
 xmlns:fo="http://www.w3.org/1999/XSL/Format"
+xmlns:hl="http://xslthl.sf.net"
 version="1.0">
 
 <xsl:import href="/usr/share/xml/docbook/stylesheet/nwalsh/html/chunk.xsl"/>
@@ -95,6 +96,9 @@ procedure before
 <!-- Source Highlight -->
 
 <xsl:param name="highlight.source" select="1"></xsl:param>
+<xsl:template match='hl:comment' mode="xslthl">
+  <i class="hl-comment" style="color: #888"><xsl:apply-templates mode="xslthl"/></i>
+</xsl:template>
 
 <!-- A grey background for our listings, gives a better indication of
 where the code starts and where it ends. -->
