@@ -1092,8 +1092,8 @@ some basic pre-requisites to be satisfied. This section will describe
 the pre-requisites and how to meet the pre-requisites.
 
 We will take the example of C program that calculates the sum of an
-array as an example. And by the end of the section will be able
-perform the necessary setup, transfer control to the C code and
+array as an example. And by the end of this section, we will be able
+to perform the necessary setup, transfer control to the C code and
 execute it.
 
 [[csum]]
@@ -1116,8 +1116,8 @@ Stack
 ~~~~~
 
 C uses the stack for storing local (auto) variables, passing function
-arguments, storing return address, etc. So it is essential the stack
-is setup correctly before transferring control to C code. 
+arguments, storing return address, etc. So it is essential that the
+stack is setup correctly, before transferring control to C code.
 
 Stacks are highly flexible in the ARM architecture, since the
 implementation is completely left to the software. For people not
@@ -1133,7 +1133,7 @@ dictated by the AAPCS. According to the AAPCS, *register `r13`* is to
 be used as the stack pointer. Also the stack should be
 *full-descending*.
 
-One of way of placing global variables and the stack is shown in the
+One way of placing global variables and the stack is shown in the
 following diagram.
 
 .Stack Placement
