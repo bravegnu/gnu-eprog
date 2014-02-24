@@ -62,7 +62,7 @@
       </dia:composite>
     </dia:attribute>
   </dia:diagramdata>
-  <dia:layer name="Background" visible="true">
+  <dia:layer name="Background" visible="true" active="true">
     <dia:object type="Flowchart - Box" version="0" id="O0">
       <dia:attribute name="obj_pos">
         <dia:point val="5,5"/>
@@ -100,7 +100,7 @@
             <dia:real val="0.80000000000000004"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="9,12.65"/>
+            <dia:point val="9,12.695"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -113,19 +113,22 @@
     </dia:object>
     <dia:object type="Flowchart - Box" version="0" id="O1">
       <dia:attribute name="obj_pos">
-        <dia:point val="5,4.95"/>
+        <dia:point val="5,5"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="4.95,4.9;13.05,8.05"/>
+        <dia:rectangle val="4.95,4.95;13.05,8.05"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
-        <dia:point val="5,4.95"/>
+        <dia:point val="5,5"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
         <dia:real val="8"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="3.0499999999999998"/>
+        <dia:real val="3"/>
+      </dia:attribute>
+      <dia:attribute name="border_width">
+        <dia:real val="0.10000000149011612"/>
       </dia:attribute>
       <dia:attribute name="inner_color">
         <dia:color val="#90ee90"/>
@@ -134,7 +137,7 @@
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:attribute name="padding">
-        <dia:real val="0.5"/>
+        <dia:real val="0"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -148,7 +151,7 @@
             <dia:real val="1"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="9,6.675"/>
+            <dia:point val="9,6.745"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -164,7 +167,7 @@
         <dia:point val="13.5,5"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="13.5,4.2775;18.9225,5.545"/>
+        <dia:rectangle val="13.5,4.255;19,5.19"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -197,7 +200,7 @@
         <dia:point val="13.5,20"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="13.5,19.2775;18.9225,20.545"/>
+        <dia:rectangle val="13.5,19.255;19,20.19"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -262,7 +265,7 @@
             <dia:real val="1"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="9,17.75"/>
+            <dia:point val="9,17.795"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -278,7 +281,7 @@
         <dia:point val="9,16"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="8,11.95;10,16.05"/>
+        <dia:rectangle val="8.4191,11.8882;9.5809,16.05"/>
       </dia:attribute>
       <dia:attribute name="conn_endpoints">
         <dia:point val="9,16"/>
@@ -321,7 +324,7 @@
         <dia:point val="3.5,20"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-0.6,19.2775;3.5225,21.545"/>
+        <dia:rectangle val="-1.18,19.255;3.5,21.19"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -355,7 +358,7 @@ Pointer#</dia:string>
         <dia:point val="5.5,4.5"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="5.5,3.7775;7.14359,5.045"/>
+        <dia:rectangle val="5.5,3.755;7.26,4.69"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
