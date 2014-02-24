@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<highlighters>
+	<highlighter type="oneline-comment">
+		<start>;;</start>
+		<style>doccomment</style>
+	</highlighter>
+	<highlighter type="oneline-comment">@</highlighter>
+	<highlighter type="string">
+		<string>"</string>
+		<escape>\</escape>
+	</highlighter>
+	<highlighter type="hexnumber">
+		<prefix>#0x</prefix>
+		<ignoreCase />
+	</highlighter>
+	<highlighter type="hexnumber">
+		<prefix>0x</prefix>
+		<ignoreCase />
+	</highlighter>
+	<highlighter type="number">
+		<prefix>#</prefix>
+		<point>.</point>
+		<pointStarts />
+		<ignoreCase />
+	</highlighter>
+	<highlighter type="number">
+		<point>.</point>
+		<pointStarts />
+		<ignoreCase />
+	</highlighter>
+	<highlighter type="regex">
+	        <style>keyword</style>
+		<flags>MULTILINE</flags>
+		<pattern>^[a-zA-Z0-9_]+[:]</pattern>
+	</highlighter>
+	<highlighter type="keywords">
+	        <style>directive</style>
+		<beginChars>.</beginChars>
+		<keyword>data</keyword>
+		<keyword>text</keyword>
+		<keyword>global</keyword>
+		<keyword>asciz</keyword>
+		<keyword>space</keyword>
+		<keyword>align</keyword>
+		<keyword>skip</keyword>
+		<keyword>equ</keyword>
+		<keyword>4byte</keyword>
+		<keyword>2byte</keyword>
+		<keyword>byte</keyword>
+	</highlighter>
+</highlighters>
