@@ -26,8 +26,8 @@ htmls = arm-iset.html \
 
 all: $(htmls) $(images) revision.rss
 
-gnu-eprog.fo: gnu-eprog.xml
-	xsltproc -o $@ /usr/share/xml/docbook/stylesheet/nwalsh/fo/docbook.xsl $<
+gnu-eprog.epub: gnu-eprog.asciidoc $(images)
+	a2x -d book -f epub $<
 
 $(htmls): gnu-eprog.xml 
 	java -cp "/usr/share/java/saxon.jar:/usr/share/java/xslthl.jar" \

@@ -35,4 +35,15 @@
     <revremark>Typo fixes reported by Jeffrey Antony, Jonathan Grant and David LeBlanc.</revremark>
   </revision>
 
+  <revision>
+    <revnumber>0.6.0</revnumber>
+    <date>Sun, 2 Mar 2013 00:00:00 +0530</date>
+    <authorinitials>BVK</authorinitials>
+    <revremark>
+    Contributing section updated with the new location of the
+    gnu-eprog source repository. Qemu installation updated with
+    package installation for Squeeze and Wheezy. Grammar and typo
+    fixes in the text.
+    </revremark>
+  </revision>
 </revhistory>
