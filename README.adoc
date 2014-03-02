@@ -1,0 +1,21 @@
+= Embedded Programming using the GNU Toolchain
+
+This is a short tutorial on using the GNU toolchain for bare metal
+programming. The tutorial uses Qemu to simulate an ARM board, and
+provides instructions to test programs within the simulated
+machine. The following topics will be covered.
+
+  * Writing assembly language programs
+  * Writing linker scripts
+  * Writing C Startup code
+  * Using the C library
+  * Inline Assembler
+
+The tutorial is written in asciidoc. The asciidoc source is converted
+to DocBook and then rendered to HTML.
+
+The official rendered version of the is book is available from
+http://www.bravegnu.org/gnu-eprog/
+
+
+
