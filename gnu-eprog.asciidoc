@@ -64,27 +64,12 @@ will be introduced in the course of the tutorial.
 Installing Qemu in Debian
 ~~~~~~~~~~~~~~~~~~~~~~~~~
  
-Debian Etch has a `qemu` package, but the version is 0.8.2, which does
-not have the connex board emulation. Debian Etch backports has version
-0.9.1 of qemu. To install from backports:
+This tutorial requires qemu version 0.9.1 or above. The qemu package
+available in Debian Squeeze/Wheezy, meets this requirement. Install
+`qemu` using `apt-get`.
 
-  1. Add the following line to `/etc/apt/source.list`
-+
 ------
-deb http://www.backports.org/debian etch-backports main contrib non-free
-------
-+
-  2. Add the archive's key to `apt`.
-+
-------
-$ wget -O - http://backports.org/debian/archive.key | apt-key add -
-------
-+
-  3. Run `apt-get update`.
-  4. Install `qemu` from backports
-+
-------
-$ apt-get -t etch-backports install qemu
+$ apt-get install qemu
 ------
 
 Installing GNU Toolchain for ARM
