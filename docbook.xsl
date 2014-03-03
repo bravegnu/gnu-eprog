@@ -6,7 +6,7 @@ xmlns:fo="http://www.w3.org/1999/XSL/Format"
 xmlns:hl="http://xslthl.sf.net"
 version="1.0">
 
-<xsl:import href="/usr/share/xml/docbook/stylesheet/nwalsh/html/chunk.xsl"/>
+<xsl:import href="/usr/share/xml/docbook/stylesheet/nwalsh/html/chunkfast.xsl"/>
 <xsl:import href="/usr/share/xml/docbook/stylesheet/nwalsh/html/highlight.xsl"/>
 
 <xsl:param name="use.id.as.filename" select="'1'"/>
@@ -158,6 +158,55 @@ where the code starts and where it ends. -->
 
 <xsl:template name="user.head.content">
 <link href="revision.rss" type="application/rss+xml" rel="alternate" title="Revision updates" />
+</xsl:template>
+
+<xsl:template name="chunk-element-content">
+  <xsl:param name="prev"/>
+  <xsl:param name="next"/>
+  <xsl:param name="nav.context"/>
+  <xsl:param name="content">
+    <xsl:apply-imports/>
+  </xsl:param>
+
+  <xsl:call-template name="user.preroot"/>
+
+  <html>
+    <xsl:call-template name="html.head">
+      <xsl:with-param name="prev" select="$prev"/>
+      <xsl:with-param name="next" select="$next"/>
+    </xsl:call-template>
+
+    <body>
+      <xsl:call-template name="body.attributes"/>
+      <div class="body">
+      <span id="forkongithub">
+        <a href="https://github.com/bravegnu/gnu-eprog">Fork me on GitHub</a>
+      </span>
+      <xsl:call-template name="user.header.navigation"/>
+
+      <xsl:call-template name="header.navigation">
+        <xsl:with-param name="prev" select="$prev"/>
+        <xsl:with-param name="next" select="$next"/>
+        <xsl:with-param name="nav.context" select="$nav.context"/>
+      </xsl:call-template>
+
+      <xsl:call-template name="user.header.content"/>
+
+      <xsl:copy-of select="$content"/>
+
+      <xsl:call-template name="user.footer.content"/>
+
+      <xsl:call-template name="footer.navigation">
+        <xsl:with-param name="prev" select="$prev"/>
+        <xsl:with-param name="next" select="$next"/>
+        <xsl:with-param name="nav.context" select="$nav.context"/>
+      </xsl:call-template>
+
+      <xsl:call-template name="user.footer.navigation"/>
+      </div>
+    </body>
+  </html>
+  <xsl:value-of select="$chunk.append"/>
 </xsl:template>
 
 </xsl:stylesheet>
