@@ -6,7 +6,14 @@ Make this repo fork into your GitHub account and work with it.
 
 === Install required software
 
-sudo apt install asciidoc docbook libsaxon-java
+sudo apt install asciidoc docbook libsaxon-java libxslthl-java imgsizer dia
+
+=== Clone your repo
+
+cd ~
+git clone -o gh https://github.com/yourname/gnu-eprog
+cd gnu-eprog
+git gui &
 
 === Do you project
 
