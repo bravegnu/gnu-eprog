@@ -1609,9 +1609,12 @@ Just define two variables and one rule:
 
 ------
 S = file1.s file2.s ... file333.s
+S += file334.s ... file100500.s
 O = file1.o file2.o ... file333.o
+O += file334.o ... file100500.o
 $(O): $(S)
 ------
+* `+=` adds values to variable
 
 and metarules set will be automagically build your huge project.
 
