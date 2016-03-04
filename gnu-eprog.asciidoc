@@ -1409,7 +1409,7 @@ Variables
 Variable is object in makefile, which can contain some text. For example, we
 can define some vars in makefile, and use them in all rules.
 
-Very useful make tip: yyou can use two special variables: $@ and @<.
+Very useful make tip: you can use two special variables: $@ and @<.
 
 `$@`:: variable represents left side of Makefile rule, typically single 
 <target> file name
@@ -1433,6 +1433,13 @@ ARCH = arm
 # target system triplet
 TARGET = $(ARCH)-none-eabi-
 
+# std. toolchain commands
+AS = $(TARGET)as
+LD = $(TARGET)ld
+CC = $(TARGET)gcc
+CXX = $(TARGET)g++
+OBJDUMP = $(TARGET)objdump
+
 # FlashROM size of target system, in 4K block
 FLASHBLOCKS = 4K
 emulation: $(APP).flash
@@ -1443,16 +1450,16 @@ $(APP).flash: $(APP).bin
 	dd if=/dev/zero of=$@ bs=4K count=$(FLASHBLOCKS)
 	dd if=$< of=$@ bs=4K conv=notrunc
 $(APP).bin: $(APP).elf
-	$(TARGET)objcopy -O binary $< $@
+	$(OBJCOPY) -O binary $< $@
 $(APP).elf: $(APP).o	
-	$(TARGET)ld -o $@ $<
+	$(LD) -o $@ $<
 $(APP).o: $(APP).s
-	$(TARGET)as -o $@ $<
+	$(AS) -o $@ $<
 ------
 
 First of all, we replaced all file names with $(APP).<extension>.
 
-NOTE: Note use of variables in $(...) brackets, and specials `$@` and `$<`
+NOTE: Note use of variables in `$(...)` brackets, and specials `$@` and `$<`
 
 Then, we replaced all file parameters in assembler/linkers calls with 
 `$@` and `$<`, which makes our rules more rigid.
