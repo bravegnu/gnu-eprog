@@ -1597,12 +1597,12 @@ Now you don't need to define rules for every file compiling like:
 
 ------
 file1.o : file1.s
-	$(LD) -o $@ $<
+	$(AS) -o $@ $<
 file2.o : file2.s
-	$(LD) -o $@ $<
+	$(AS) -o $@ $<
 #### another +100500 dumb rules ####
 file333.o : file333.s
-	$(LD) -o $@ $<
+	$(AS) -o $@ $<
 ------
 
 Just define two variables and one rule:
