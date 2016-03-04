@@ -1579,9 +1579,13 @@ assemble, compile and link `any` file with specific extensions.
 .Makefile.metarules
 ------
 %.o: %.s
-	$(AS) -o $@ $<
+	$(AS) $(ASFLAGS) -o $@ $<
+%.o: %.c
+	$(CC) $(CCFLAGS) -o $@ $<
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -o $@ $<
 %.elf: %.o	
-	$(LD) -o $@ $<
+	$(LD) $(LDFLAGS) -o $@ $<
 %.bin: %.elf
 	$(OBJCOPY) -O binary $< $@
 %.flash: %.bin
