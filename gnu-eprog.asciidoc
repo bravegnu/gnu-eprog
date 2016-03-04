@@ -1299,7 +1299,7 @@ samples in this tutorial, that's time to use `make` tool.
 
 Writing makefiles is `must have` skill for programmer, especially for large
 multifile projects contains dozens of files, which must be  
-assembled, compiled and translated into documentation.
+assembled, compiled and translated into lot of different formats.
 
 Every dependency between two or more files must be configured into `rule`:
 
@@ -1344,6 +1344,10 @@ add.elf: add.o
 add.o: add.s
 	arm-none-eabi-as -o add.o add.s
 ------
+* note backslash and next left-tabbed line if first rule: 
+you can split long command into set
+of lines; each line must be tabbed with one or more tab to follow makerule 
+syntax. 
 
 Enter make command without any arguments in directory with Makefile and source
 files, and you will get automatically compiled binary files and running Qemu.
@@ -1376,7 +1380,7 @@ source file was not changed, and make will not run assembler rule.
 
 This is very useful if you have lot of source files (thousands files, like 
 Linux kernel for example), and fix some bug only in one source file. Without
-make (using simple .rc SHELL of `.bat`ch file) every tiny change in source file
+make (using simple .rc SHELL of .bat ch file) every tiny change in source file
 will tend recompiling of all project, which can lasts for several hours.
 Using `make` you can do only few required compiler and linker calls, which will
 be much much faster.
@@ -1387,9 +1391,16 @@ file, by `touch`ing them:
 ------
 $ touch add.s 
 $ make add.o
-make: 'add.o' is up to date.
+arm-none-eabi-as -o add.o add.s
 ------
 
+`touch` command changes only modification time of source file add.s, not
+chainging it's content, thus `make` will note that file changed, and run
+assembler for selected <target>=add.o.
+
+By default, make will print every command and it's output. If you have some
+reason to quiet make logging, you can prefix some compiler commands in make rule
+with "-" minus sign.  
 
 [[makevars]]
 Variables
