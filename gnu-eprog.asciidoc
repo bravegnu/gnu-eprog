@@ -1319,6 +1319,8 @@ People
     Jonathan Grant, David LeBlanc, reported typos and suggested
     fixes in the code and text.
 
+  * Dmitry Ponyatov added some info on build automation using make tool.
+	
 Tools
 ~~~~~
 

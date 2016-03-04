@@ -6,6 +6,7 @@ provides instructions to test programs within the simulated
 machine. The following topics will be covered.
 
   * Writing assembly language programs
+  * Using make for build automation
   * Writing linker scripts
   * Writing C Startup code
   * Using the C library
