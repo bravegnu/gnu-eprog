@@ -1289,6 +1289,101 @@ Inline Assembly
 
 FIXME: This section is yet to be written.
 
+[[make]]
+Using `make` for build automation
+-------------------------------
+
+If you bothered with set of long commands you enter every time compiling
+samples in this tutorial, that's time to use `make` tool. 
+`make` is utility which controls file dependencies, described in `Makefile`.
+
+Writing makefiles is `must have` skill for programmer, especially for large
+multifile projects contains dozens of files, which must be  
+assembled, compiled and translated into documentation.
+
+Every dependency between two or more files must be configured into `rule`:
+
+------
+<target> : <source>
+<tab><compiling command1>
+<tab><compiling command2>
+...
+------
+
+`target`:: is one file name, or few file names, delimited by spaces. 
+This file(s) will be created or updated by this make rule.
+
+`source`:: null or more file names delimited by spaces. This file(s) will be
+`checked for modifications` by last edit time marker.
+
+`tab`:: is tabulation char with ascii code 0x09, you must have editor able to
+work with tabs not overwriting them into sequencies of spaces. Make rule can
+have zero rules, or some tabbed compiling commands.
+
+`compiling command`:: any command, like assembly or linker call, which updates
+<target>s, doing some useful job.   
+
+NOTE: Main principle of every makefile rule: if one of <source> files 
+`newer` then one of <target> file, rule body will be executed to update
+<target>s.
+
+Let's write simple makefile for tiny program, described in `Hello ARM` section:
+
+.Makefile
+------
+emulation: add.flash
+	qemu-system-arm -M connex -pflash add.flash -nographic -serial /dev/null
+flash.bin: add.bin
+	dd if=/dev/zero of=flash.bin bs=4K count=4K
+	dd if=$< of=flash.bin bs=4K conv=notrunc
+add.bin: add.elf
+	arm-none-eabi-objcopy -O binary add.elf add.bin
+add.elf: add.o	
+	arm-none-eabi-ld -o add.elf add.o
+add.o: add.s
+	arm-none-eabi-as -o add.o add.s
+------
+
+[[makevars]]
+Variables
+~~~~~~~~~
+
+Very useful make tip: variables. First of all, you can use two
+special variables: $@ and @<.
+
+$@ variable represents left side of Makefile rule
+ 
+
+------
+APP += add
+------
+
+[[makeqemu]]
+Run qemu from `Makefile`
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+------
+.PHONY: emu
+emu: $(APP).flash
+	qemu-system-arm -M connex -pflash $< -nographic -serial /dev/null
+------
+
+[[makerules]]
+Using rules
+~~~~~~~~~~~
+
+------
+%.o: %.s
+	arm-none-eabi-as -o $@ $<
+%.elf: %.o	
+	arm-none-eabi-ld -o $@ $<
+%.bin: %.elf
+	arm-none-eabi-objcopy -O binary $< $@
+%.flash: %.bin
+	dd if=/dev/zero of=$@ bs=4K count=4K &&\
+	dd if=$< of=$@ bs=4K conv=notrunc
+------
+
 [[contributing]]
 Contributing
 ------------
@@ -1304,6 +1399,14 @@ fork the project on github and send in a pull request.
 The document is written in
 http://www.methods.co.nz/asciidoc/[asciidoc], and converted to HTML
 using the http://docbook.sourceforge.net/[docbook-xsl] stylesheets.
+
+Required software install
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+------
+sudo apt install asciidoc docbook imgsizer dia
+sudo apt install libsaxon-java libxslthl-java
+------
 
 [[credits]]
 Credits
