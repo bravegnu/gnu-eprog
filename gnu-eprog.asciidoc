@@ -1407,26 +1407,65 @@ Variables
 ~~~~~~~~~
 
 Variable is object in makefile, which can contain some text. For example, we
-can define 
-Very useful make tip: variables. First of all, you can use two
-special variables: $@ and @<.
+can define some vars in makefile, and use them in all rules.
 
-$@ variable represents left side of Makefile rule
- 
+Very useful make tip: yyou can use two special variables: $@ and @<.
+
+`$@`:: variable represents left side of Makefile rule, typically single 
+file name
+
+`$<`:: variable will be replaced by `first` file if <source> list
+
+NOTE: running make, you can forced redefine any variables values: change
+compiler options, tune rules, and ever use one universal makefile for all
+of your projects.  
+
+So, we can change our makefile to be more adaptive:
 
 ------
-APP += add
+# APPlication name, you can change it in make command line parameters
+# to compile other onefile program with same makefile
+APP = add
+
+# some std.variables widely used in Linux source builds:
+# architecture
+ARCH = arm
+# target system triplet
+TARGET = $(ARCH)-none-eabi-
+
+# FlashROM size of target system, in 4K block
+FLASHBLOCKS = 4K
+emulation: $(APP).flash
+	qemu-system-$(ARCH) -M connex -pflash $< \
+		-nographic -serial /dev/null
+
+$(APP).bin: $(APP).bin
+	dd if=/dev/zero of=$@ bs=4K count=$(FLASHBLOCKS)
+	dd if=$< of=$@ bs=4K conv=notrunc
+$(APP).bin: $(APP).elf
+	$(TARGET)objcopy -O binary $< $@
+$(APP).elf: $(APP).o	
+	$(TARGET)ld -o add.elf add.o
+$(APP).o: $(APP).s
+	$(TARGET)as -o add.o add.s
 ------
+
+[[makestdvars]]
+Standard make variables
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Some vars widely used in makefiles of Linux program sources. You can use this
+makefiles as samples for lot of make tricks, not covered by this tutorial.
+
+`ARCH`:: target system architecture: arm, mips, i386, x86_64, avr,...
+
+`TARGET`:: target system `triplet`: arm-none-eabi, i486-none-elf, 
+i686-linux-uclibc, selects lot of cross-compiler config parameters, vastly
+impacts on compiled binary code: CPU command set, memory layout,...
 
 [[makeqemu]]
 Run qemu from `Makefile`
 ~~~~~~~~~~~~~~~~~~~~~~~~
-
-------
-.PHONY: emu
-emu: $(APP).flash
-	qemu-system-arm -M connex -pflash $< -nographic -serial /dev/null
-------
 
 [[makerules]]
 Using rules
