@@ -1,5 +1,20 @@
 = Contributing manual on gnu-eprog tutorial
 
+Contributing
+------------
+
+Like every other open source project, we gladly accept
+contributions. Sections that need help have been marked with
+FIXMEs. All contributions will be duly credited in the credits page.
+
+This document's source is maintained in a public git repo located at
+https://github.com/bravegnu/gnu-eprog To contribute to the project,
+fork the project on github and send in a pull request.
+
+The document is written in
+http://www.methods.co.nz/asciidoc/[asciidoc], and converted to HTML
+using the http://docbook.sourceforge.net/[docbook-xsl] stylesheets.
+
 === Fork this repo into your GitHub account
 
 Make this repo fork into your GitHub account and work with it.
