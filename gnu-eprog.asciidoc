@@ -1412,7 +1412,7 @@ can define some vars in makefile, and use them in all rules.
 Very useful make tip: yyou can use two special variables: $@ and @<.
 
 `$@`:: variable represents left side of Makefile rule, typically single 
-file name
+<target> file name
 
 `$<`:: variable will be replaced by `first` file if <source> list
 
@@ -1439,15 +1439,49 @@ emulation: $(APP).flash
 	qemu-system-$(ARCH) -M connex -pflash $< \
 		-nographic -serial /dev/null
 
-$(APP).bin: $(APP).bin
+$(APP).flash: $(APP).bin
 	dd if=/dev/zero of=$@ bs=4K count=$(FLASHBLOCKS)
 	dd if=$< of=$@ bs=4K conv=notrunc
 $(APP).bin: $(APP).elf
 	$(TARGET)objcopy -O binary $< $@
 $(APP).elf: $(APP).o	
-	$(TARGET)ld -o add.elf add.o
+	$(TARGET)ld -o $@ $<
 $(APP).o: $(APP).s
-	$(TARGET)as -o add.o add.s
+	$(TARGET)as -o $@ $<
+------
+
+First of all, we replaced all file names with $(APP).<extension>.
+
+NOTE: Note use of variables in $(...) brackets, and specials `$@` and `$<`
+
+Then, we replaced all file parameters in assembler/linkers calls with 
+`$@` and `$<`, which makes our rules more rigid.
+
+Also we used some std.variables to select target system architecture, and
+prefixed all compiler calls with $(TARGET) variable.
+
+NOTE: Now we can compile `other` source file: arrsum.s, contains listing 
+of array summation program. We override APP variable value in command line.  
+
+------
+$ make APP=arrsum
+
+arm-none-eabi-as -o arrsum.o arrsum.s
+arm-none-eabi-ld -o arrsum.elf arrsum.o
+arm-none-eabi-ld: warning: cannot find entry symbol _start; defaulting to 0000000000008000
+arm-none-eabi-objcopy -O binary arrsum.elf arrsum.bin
+dd if=/dev/zero of=arrsum.flash bs=4K count=4K
+4096+0 records in
+4096+0 records out
+16777216 bytes (17 MB) copied, 0.0184385 s, 910 MB/s
+dd if=arrsum.bin of=arrsum.flash bs=4K conv=notrunc
+0+1 records in
+0+1 records out
+48 bytes (48 B) copied, 5.9686e-05 s, 804 kB/s
+qemu-system-arm -M connex -pflash arrsum.flash \
+        -nographic -serial /dev/null
+QEMU 2.1.2 monitor - type 'help' for more information
+(qemu) q
 ------
 
 [[makestdvars]]
