@@ -1332,10 +1332,11 @@ Let's write simple makefile for tiny program, described in `Hello ARM` section:
 .Makefile
 ------
 emulation: add.flash
-	qemu-system-arm -M connex -pflash add.flash -nographic -serial /dev/null
+	qemu-system-arm -M connex -pflash add.flash \
+		-nographic -serial /dev/null
 flash.bin: add.bin
 	dd if=/dev/zero of=flash.bin bs=4K count=4K
-	dd if=$< of=flash.bin bs=4K conv=notrunc
+	dd if=add.bin of=flash.bin bs=4K conv=notrunc
 add.bin: add.elf
 	arm-none-eabi-objcopy -O binary add.elf add.bin
 add.elf: add.o	
@@ -1344,10 +1345,58 @@ add.o: add.s
 	arm-none-eabi-as -o add.o add.s
 ------
 
+Enter make command without any arguments in directory with Makefile and source
+files, and you will get automatically compiled binary files and running Qemu.
+
+------
+$ make
+...
+QEMU 2.1.2 monitor - type 'help' for more information
+(qemu)
+------
+
+NOTE: If you use make without parameters, first rule in Makefile will be
+processed as main <target>, walking over dependencies in all rules.
+
+[[makeseltarget]]
+Selecting specific <target>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you need to update only specific <target>, not first rule, put required 
+file name after make command:
+
+------
+$ make add.o
+make: 'add.o' is up to date.
+------
+
+This command will build only add.o object file, if and only if you modified add.s 
+before command run. If you see some message like `make: 'add.o' is up to date.`,
+source file was not changed, and make will not run assembler rule. 
+
+This is very useful if you have lot of source files (thousands files, like 
+Linux kernel for example), and fix some bug only in one source file. Without
+make (using simple .rc SHELL of `.bat`ch file) every tiny change in source file
+will tend recompiling of all project, which can lasts for several hours.
+Using `make` you can do only few required compiler and linker calls, which will
+be much much faster.
+
+Returning to our add.o, you can force assembler run not changing add.s source
+file, by `touch`ing them:
+
+------
+$ touch add.s 
+$ make add.o
+make: 'add.o' is up to date.
+------
+
+
 [[makevars]]
 Variables
 ~~~~~~~~~
 
+Variable is object in makefile, which can contain some text. For example, we
+can define 
 Very useful make tip: variables. First of all, you can use two
 special variables: $@ and @<.
 
