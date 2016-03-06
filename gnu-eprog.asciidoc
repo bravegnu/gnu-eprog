@@ -1317,15 +1317,15 @@ This file(s) will be created or updated by this make rule.
 `checked for modifications` by last edit time marker.
 
 `tab`:: is tabulation char with ascii code 0x09, you must have editor able to
-work with tabs not overwriting them into sequencies of spaces. Make rule can
-have zero rules, or some tabbed compiling commands.
+work with tabs not overwriting them into sequences of spaces. Make rule can
+have zero rules or some tabbed compiling commands.
 
 `compiling command`:: any command, like assembly or linker call, which updates
-<target>s, doing some useful job.   
+`target`s, doing some useful job.   
 
-NOTE: Main principle of every makefile rule: if one of <source> files 
-`newer` then one of <target> file, rule body will be executed to update
-<target>s.
+NOTE: The main principle of every makefile rule: if one of `source` files 
+`newer` then one of `target` file, rule body will be executed to update
+`target` s.
 
 Let's write simple makefile for tiny program, described in `Hello ARM` section:
 
@@ -1360,13 +1360,13 @@ QEMU 2.1.2 monitor - type 'help' for more information
 ------
 
 NOTE: If you use make without parameters, `first rule` in Makefile will be
-processed as main <target>, walking over dependencies in all rules.
+processed as main `target`, walking over dependencies in all rules.
 
 [[makeseltarget]]
-Selecting specific <target>
+Selecting specific `target`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If you need to update only specific <target>, not first rule, put required 
+If you need to update only specific `target`, not first rule, put required 
 file name after make command:
 
 ------
@@ -1378,7 +1378,7 @@ This command will build only add.o object file, if and only if you modified add.
 before command run. If you see some message like `make: 'add.o' is up to date.`,
 source file was not changed, and make will not run assembler rule. 
 
-This is very useful if you have lot of source files (thousands files, like 
+This is very useful if you have lot of source files (thousands of files, like 
 Linux kernel for example), and fix some bug only in one source file. Without
 make (using simple .rc shell script of .bat ch file) every tiny change in 
 source file
@@ -1396,10 +1396,10 @@ arm-none-eabi-as -o add.o add.s
 ------
 
 `touch` command changes only modification time of source file add.s, not
-chainging it's content, thus `make` will note that file changed, and run
-assembler for selected <target>=add.o.
+changing it's content, thus `make` will note that file changed, and run
+assembler for selected target=add.o.
 
-By default, make will print every command and it's output. If you have some
+By default, make will print every command and its output. If you have some
 reason to quiet make logging, you can prefix some compiler commands in make rule
 with "-" minus sign.  
 
@@ -1413,9 +1413,9 @@ can define some vars in makefile, and use them in all rules.
 Very useful make tip: you can use two special variables: $@ and @<.
 
 `$@`:: variable represents left side of Makefile rule, typically single 
-<target> file name
+`target` file name
 
-`$<`:: variable will be replaced by `first` file if <source> list
+`$<`:: variable will be replaced by `first` file if `source` list
 
 NOTE: running make, you can forced redefine any variables values: change
 compiler options, tune rules, and ever use one universal makefile for all
@@ -1425,7 +1425,7 @@ So, we can change our makefile to be more adaptive:
 
 ------
 # APPlication name, you can change it in make command line parameters
-# to compile other onefile program with same makefile
+# to compile another onefile program with same makefile
 APP = add
 
 # some std.variables widely used in Linux source builds:
@@ -1443,7 +1443,7 @@ OBJCOPY = $(TARGET)objcopy
 
 # FlashROM size of target system, in 4K block
 FLASHBLOCKS = 4K
-emulation: $(APP).flash
+emu: $(APP).flash
 	qemu-system-$(ARCH) -M connex -pflash $< \
 		-nographic -serial /dev/null
 
@@ -1468,7 +1468,7 @@ Then, we replaced all file parameters in assembler/linker calls with
 Also we used some std.variables to select target system architecture, and
 prefixed all toolchain calls with $(TARGET) variable.
 
-NOTE: Now we can compile `other` source file: arrsum.s, contains listing 
+NOTE: Now we can compile `another` source file: arrsum.s, contains listing 
 of array summation program. We `override APP variable value in command line`:  
 
 ------
@@ -1492,11 +1492,11 @@ QEMU 2.1.2 monitor - type 'help' for more information
 (qemu) q
 ------
 
-Wow, we compiled other program without any change in Makefile, all file names
+Wow, we compiled another program without any change in Makefile, all file names
 was renamed automatically, we jet get separate flash image and running Qemu 
 in one command.
 
-Let's dig in details 
+Let's dig into details 
 
 [[makestdvars]]
 Standard make variables
@@ -1549,7 +1549,7 @@ OpenSource developers world have some widely used standard targets:
 
 `doc`:: build documentation, using some of asciidoc, DocBook, LaTeX,.. markup
 translators, which will translate doc sources into some widely used document
-format like .html and manual.pdf files. Fortunately you can use special program
+format like .html and manual.pdf files. Fortunately, you can use special program
 packages (for some programming languages like Java, C++,..) which let you
 process your program sources and autogenerate tables of labels, function 
 definitions with parameters a.k.a call signatures, source file lists, 
@@ -1565,7 +1565,7 @@ make
 ------
 
 `distclean`:: same as clean with removing generated files going into binary
-distribution of builded program package: .pdf/.html documentation,..
+distribution of built program package: .pdf/.html documentation,..
 
 .Recommended Makefile rules
 ------
@@ -1586,8 +1586,8 @@ distclean: clean
 .PHONY targets
 ~~~~~~~~~~~~~
 
-In previous makefile sample you can see `.PHONY some` directives.
-This directives marks <target> is one that is not really the name of a file;
+In previous makefile sample, you can see `.PHONY some` directives.
+This directives marks `target` is one that is not really the name of a file;
 rather it is just `a name for a recipe` to be executed when you make an 
 explicit request `make some` command.
 
@@ -1599,9 +1599,20 @@ Because the rm command in `clean` rule does not create a file named "clean",
 probably no such file will ever exist. Therefore, the rm command will be 
 executed every time you say ‘make clean’.
 
+NOTE: You can think about set of phony targets in Makefile as something
+like `command line menu`: you select required action by run `make action`
+
 [[makeqemu]]
 Run qemu from `Makefile`
 ~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you define special `emu` rule:
+------
+.PHONY: emu
+emu: $(APP).flash
+	qemu-system-$(ARCH) -M connex -pflash $< \
+		-nographic -serial /dev/null
+------
 
 [[makefiles]]
 Some file/directory hints
@@ -1636,7 +1647,7 @@ only one ~/universal.makefile for all of your projects.
 Using pattern rules
 ~~~~~~~~~~~~~~~~~~~
 
-Finaly, let's do some strange thing: define universal pattern rules, which will 
+Finally, let's do some strange thing: define universal pattern rules, which will 
 assemble, compile and link `any` file with specific extensions. 
 
 .Makefile pattern rules
