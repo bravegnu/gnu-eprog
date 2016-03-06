@@ -1359,7 +1359,7 @@ QEMU 2.1.2 monitor - type 'help' for more information
 (qemu)
 ------
 
-NOTE: If you use make without parameters, first rule in Makefile will be
+NOTE: If you use make without parameters, `first rule` in Makefile will be
 processed as main <target>, walking over dependencies in all rules.
 
 [[makeseltarget]]
@@ -1380,7 +1380,8 @@ source file was not changed, and make will not run assembler rule.
 
 This is very useful if you have lot of source files (thousands files, like 
 Linux kernel for example), and fix some bug only in one source file. Without
-make (using simple .rc SHELL of .bat ch file) every tiny change in source file
+make (using simple .rc shell script of .bat ch file) every tiny change in 
+source file
 will tend recompiling of all project, which can lasts for several hours.
 Using `make` you can do only few required compiler and linker calls, which will
 be much much faster.
@@ -1438,6 +1439,7 @@ LD = $(TARGET)ld
 CC = $(TARGET)gcc
 CXX = $(TARGET)g++
 OBJDUMP = $(TARGET)objdump
+OBJCOPY = $(TARGET)objcopy
 
 # FlashROM size of target system, in 4K block
 FLASHBLOCKS = 4K
@@ -1460,14 +1462,14 @@ First of all, we replaced all file names with $(APP).<extension>.
 
 NOTE: Note use of variables in `$(...)` brackets, and specials `$@` and `$<`
 
-Then, we replaced all file parameters in assembler/linkers calls with 
+Then, we replaced all file parameters in assembler/linker calls with 
 `$@` and `$<`, which makes our rules more rigid.
 
 Also we used some std.variables to select target system architecture, and
 prefixed all toolchain calls with $(TARGET) variable.
 
 NOTE: Now we can compile `other` source file: arrsum.s, contains listing 
-of array summation program. We override APP variable value in command line.  
+of array summation program. We `override APP variable value in command line`:  
 
 ------
 $ make APP=arrsum
@@ -1490,8 +1492,8 @@ QEMU 2.1.2 monitor - type 'help' for more information
 (qemu) q
 ------
 
-Wow, we compiler other program without any change in Makefile, all file names
-was renamed automatically, we just get separate flash image and running Qemu 
+Wow, we compiled other program without any change in Makefile, all file names
+was renamed automatically, we jet get separate flash image and running Qemu 
 in one command.
 
 Let's dig in details 
@@ -1500,8 +1502,9 @@ Let's dig in details
 Standard make variables
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Some vars widely used in makefiles of Linux program sources. You can use this
-makefiles as samples for lot of make tricks, not covered by this tutorial.
+Some vars widely used in makefiles of OpenSource program source packages.
+You can use this makefiles as samples for lot of make tricks, 
+not covered by this tutorial.
 
 `ARCH`:: target system architecture: arm, mips, i386, x86_64, avr,...
 
@@ -1509,7 +1512,7 @@ makefiles as samples for lot of make tricks, not covered by this tutorial.
 i686-linux-uclibc, selects lot of cross-compiler config parameters, vastly
 impacts on compiled binary code: CPU command set, memory layout,...
 
-`BUILD`:: triplet for developer computer, something like x86_64_linux_gnu. 
+`BUILD`:: triplet for your developer computer, something like x86_64-linux-gnu. 
 This var can be used if you build some helper programs, which must run on your
 workstation, for example to autogenerate some code for TARGET.
 
@@ -1535,6 +1538,66 @@ workstation, for example to autogenerate some code for TARGET.
 `CFLAGS`:: flags for C compiler, including optimization `OPT` variable 
 
 `CXXFLAGS`:: flags for C++ compiler 
+
+[[makestdtargets]]
+Standard targets
+~~~~~~~~~~~~~~~~
+
+OpenSource developers world have some widely used standard targets:
+
+`all`:: build all project, `it must be first rule in Makefile`
+
+`doc`:: build documentation, using some of asciidoc, DocBook, LaTeX,.. markup
+translators, which will translate doc sources into some widely used document
+format like .html and manual.pdf files. Fortunately you can use special program
+packages (for some programming languages like Java, C++,..) which let you
+process your program sources and autogenerate tables of labels, function 
+definitions with parameters a.k.a call signatures, source file lists, 
+and include this tables into documentation.   
+
+`clean`:: remove all intermediate files (.o .elf .bin ...) and program binary.
+Typical use of `clean` is command which you must use for total program rebuild
+from scratch:
+
+------
+make clean
+make
+------
+
+`distclean`:: same as clean with removing generated files going into binary
+distribution of builded program package: .pdf/.html documentation,..
+
+.Recommended Makefile rules
+------
+FLASH = add.flash arrsum.flash strlen.flash 
+
+.PHONY: all
+all: $(FLASH)
+
+.PHONY: clean
+	rm -rf *.o *.elf *.bin *.flash
+	
+.PHONY: distclean
+distclean: clean
+	rm -rf doc/manual.pdf
+------
+
+[[makephony]]
+.PHONY targets
+~~~~~~~~~~~~~
+
+In previous makefile sample you can see `.PHONY some` directives.
+This directives marks <target> is one that is not really the name of a file;
+rather it is just `a name for a recipe` to be executed when you make an 
+explicit request `make some` command.
+
+If you write a rule whose `recipe goal will not create the target file`,
+mark it with .PHONY, and the recipe will be executed every time the target 
+comes up for remaking. Here is an example is `all` and `clean` targets.
+
+Because the rm command in `clean` rule does not create a file named "clean", 
+probably no such file will ever exist. Therefore, the rm command will be 
+executed every time you say ‘make clean’.
 
 [[makeqemu]]
 Run qemu from `Makefile`
@@ -1570,13 +1633,13 @@ NOTE: `-f` make option let you set file other then ./Makefile, you can use
 only one ~/universal.makefile for all of your projects.
 
 [[makerules]]
-Using metarules
-~~~~~~~~~~~~~~~
+Using pattern rules
+~~~~~~~~~~~~~~~~~~~
 
-Finaly, let's do some strange thing: define universal rules, which will 
+Finaly, let's do some strange thing: define universal pattern rules, which will 
 assemble, compile and link `any` file with specific extensions. 
 
-.Makefile.metarules
+.Makefile pattern rules
 ------
 %.o: %.s
 	$(AS) $(ASFLAGS) -o $@ $<
@@ -1605,18 +1668,14 @@ file333.o : file333.s
 	$(AS) -o $@ $<
 ------
 
-Just define two variables and one rule:
+Just define one rule:
 
 ------
-S = file1.s file2.s ... file333.s
-S += file334.s ... file100500.s
-O = file1.o file2.o ... file333.o
-O += file334.o ... file100500.o
-$(O): $(S)
+.PHONY: all
+all: file1.flash file2.flash ... file10050.flash
 ------
-* `+=` adds values to variable
 
-and metarules set will be automagically build your huge project.
+and pattern rules set will be automagically build your huge project.
 
 Suddenly, make has some metarules compiled in, and you can compile assembly,
 C/C++ and some other filetype pairs without any metarule in you file. 
