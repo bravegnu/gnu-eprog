@@ -23,6 +23,8 @@ htmls = arm-iset.html \
 	c-library.html \
 	inline-assembly.html \
 	arm-stacks.html
+
+sources = code/sum.s code/strlen.s code/sum-sub.s code/main.s
 	
 # available multilanguage versions see lang-*.conf files
 # use make ALANG=ru override for translated version build
@@ -43,7 +45,7 @@ $(htmls): gnu-eprog.xml
 revision.rss: gnu-eprog.xml
 	xsltproc rss.xsl gnu-eprog.xml | tr -s "\n" > revision.rss
 
-%.xml: %.asciidoc
+%.xml: %.asciidoc $(sources)
 	asciidoc -a lang=$(ALANG) -b docbook  $<
 
 %.png: %.dia
