@@ -1493,7 +1493,7 @@ myvar = Hello World
 -------
 
 Here `myvar` is the variable name, and "Hello World" is the text
-stored in `myvar`. The value of a variable can be retreived, using the
+stored in `myvar`. The value of a variable can be retrieved, using the
 notation `$(myvar)`.
 
 Very useful make tip: you can use two special variables: `$@` and
@@ -1506,14 +1506,14 @@ single `target` file name
 
 NOTE: While running `make`, you can force redefinition of any variable
 value. change compiler options, tune rules, and ever use one universal
-makefile for all of your projects.
+Makefile for all of your projects.
 
 We change our `Makefile` to use variables, so that it is easy to
 adapt, and also reduces repetition.
 
 ------
 # APPlication name, you can change it in make command line parameters
-# to compile another onefile program with same makefile
+# to compile another one file program with same Makefile
 APP = add
 
 # some std.variables widely used in Linux source builds:
