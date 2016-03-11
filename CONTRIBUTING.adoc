@@ -1,7 +1,6 @@
-= Contributing manual on gnu-eprog tutorial
+= Contributing to the Tutorial
 
-Contributing
-------------
+== Contributing
 
 Like every other open source project, we gladly accept
 contributions. Sections that need help have been marked with
@@ -15,34 +14,25 @@ The document is written in
 http://www.methods.co.nz/asciidoc/[asciidoc], and converted to HTML
 using the http://docbook.sourceforge.net/[docbook-xsl] stylesheets.
 
-=== Fork this repo into your GitHub account
-
-Make this repo fork into your GitHub account and work with it.
-
-=== Install required software
-
+  * Fork this repo into your GitHub account.
+  
+  * Install required software, for Debian / Ubuntu, use the following command.
++
 ------
 sudo apt install asciidoc docbook libsaxon-java libxslthl-java imgsizer dia
 ------
-
-=== Clone your repo
-
++
+  * Clone your repo.
++
 ------
-cd ~
 git clone -o gh https://github.com/yourname/gnu-eprog
 cd gnu-eprog
-git gui &
 ------
++
+  * Make your changes.
+  
+  * Push you changes with `git`. Do use desriptive comments in your
+    commits.
 
-=== Do you project
-
-Do what you want
-
-=== Push you changes with git
-
-Do desriptive comments on reasonable changesets
-
-=== Send pull request to gnu-eprog maintainer
-
-Send pull request to gnu-eprog maintainer to review your changes and merge
-them into master gnu-eprog branch.
+  * Send pull request to `gnu-eprog` maintainer, to review your
+    changes and merge them into `master` `gnu-eprog` branch.
