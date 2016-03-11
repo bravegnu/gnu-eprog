@@ -24,6 +24,12 @@ htmls = arm-iset.html \
 	inline-assembly.html \
 	arm-stacks.html
 
+sources = code/sum.s code/strlen.s code/sum-sub.s code/main.s
+	
+# available multilanguage versions see lang-*.conf files
+# use make ALANG=ru override for translated version build
+ALANG = en	
+
 all: $(htmls) $(images) revision.rss
 
 gnu-eprog.epub: gnu-eprog.asciidoc $(images)
@@ -39,8 +45,8 @@ $(htmls): gnu-eprog.xml
 revision.rss: gnu-eprog.xml
 	xsltproc rss.xsl gnu-eprog.xml | tr -s "\n" > revision.rss
 
-%.xml: %.asciidoc
-	asciidoc -b docbook  $<
+%.xml: %.asciidoc $(sources)
+	asciidoc -a lang=$(ALANG) -b docbook  $<
 
 %.png: %.dia
 	dia --export=$@ --filter=png-libart $<

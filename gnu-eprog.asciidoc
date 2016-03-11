@@ -1289,6 +1289,408 @@ Inline Assembly
 
 FIXME: This section is yet to be written.
 
+[[make]]
+Using `make` for build automation
+-------------------------------
+
+If you bothered with set of long commands you enter every time compiling
+samples in this tutorial, that's time to use `make` tool. 
+`make` is utility which controls file dependencies, described in `Makefile`.
+
+Writing makefiles is `must have` skill for programmer, especially for large
+multifile projects contains dozens of files, which must be  
+assembled, compiled and translated into lot of different formats.
+
+Every dependency between two or more files must be configured into `rule`:
+
+------
+<target> : <source>
+<tab><compiling command1>
+<tab><compiling command2>
+...
+------
+
+`target`:: is one file name, or few file names, delimited by spaces. 
+This file(s) will be created or updated by this make rule.
+
+`source`:: null or more file names delimited by spaces. This file(s) will be
+`checked for modifications` by last edit time marker.
+
+`tab`:: is tabulation char with ascii code 0x09, you must have editor able to
+work with tabs not overwriting them into sequences of spaces. Make rule can
+have zero rules or some tabbed compiling commands.
+
+`compiling command`:: any command, like assembly or linker call, which updates
+`target`s, doing some useful job.   
+
+NOTE: The main principle of every makefile rule: if one of `source` files 
+`newer` then one of `target` file, rule body will be executed to update
+`target` s.
+
+Let's write simple makefile for tiny program, described in `Hello ARM` section:
+
+.Makefile
+------
+emulation: add.flash
+	qemu-system-arm -M connex -pflash add.flash \
+		-nographic -serial /dev/null
+flash.bin: add.bin
+	dd if=/dev/zero of=flash.bin bs=4K count=4K
+	dd if=add.bin of=flash.bin bs=4K conv=notrunc
+add.bin: add.elf
+	arm-none-eabi-objcopy -O binary add.elf add.bin
+add.elf: add.o	
+	arm-none-eabi-ld -o add.elf add.o
+add.o: add.s
+	arm-none-eabi-as -o add.o add.s
+------
+* note backslash and next left-tabbed line if first rule: 
+you can split long command into set
+of lines; each line must be tabbed with one or more tab to follow makerule 
+syntax. 
+
+Enter make command without any arguments in directory with Makefile and source
+files, and you will get automatically compiled binary files and running Qemu.
+
+------
+$ make
+...
+QEMU 2.1.2 monitor - type 'help' for more information
+(qemu)
+------
+
+NOTE: If you use make without parameters, `first rule` in Makefile will be
+processed as main `target`, walking over dependencies in all rules.
+
+[[makeseltarget]]
+Selecting specific `target`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you need to update only specific `target`, not first rule, put required 
+file name after make command:
+
+------
+$ make add.o
+make: 'add.o' is up to date.
+------
+
+This command will build only add.o object file, if and only if you modified add.s 
+before command run. If you see some message like `make: 'add.o' is up to date.`,
+source file was not changed, and make will not run assembler rule. 
+
+This is very useful if you have lot of source files (thousands of files, like 
+Linux kernel for example), and fix some bug only in one source file. Without
+make (using simple .rc shell script of .bat ch file) every tiny change in 
+source file
+will tend recompiling of all project, which can lasts for several hours.
+Using `make` you can do only few required compiler and linker calls, which will
+be much much faster.
+
+Returning to our add.o, you can force assembler run not changing add.s source
+file, by `touch`ing them:
+
+------
+$ touch add.s 
+$ make add.o
+arm-none-eabi-as -o add.o add.s
+------
+
+`touch` command changes only modification time of source file add.s, not
+changing it's content, thus `make` will note that file changed, and run
+assembler for selected target=add.o.
+
+By default, make will print every command and its output. If you have some
+reason to quiet make logging, you can prefix some compiler commands in make rule
+with "-" minus sign.  
+
+[[makevars]]
+Variables
+~~~~~~~~~
+
+Variable is object in makefile, which can contain some text. For example, we
+can define some vars in makefile, and use them in all rules.
+
+Very useful make tip: you can use two special variables: $@ and @<.
+
+`$@`:: variable represents left side of Makefile rule, typically single 
+`target` file name
+
+`$<`:: variable will be replaced by `first` file if `source` list
+
+NOTE: running make, you can forced redefine any variables values: change
+compiler options, tune rules, and ever use one universal makefile for all
+of your projects.  
+
+So, we can change our makefile to be more adaptive:
+
+------
+# APPlication name, you can change it in make command line parameters
+# to compile another onefile program with same makefile
+APP = add
+
+# some std.variables widely used in Linux source builds:
+## architecture
+ARCH = arm
+## target system triplet
+TARGET = $(ARCH)-none-eabi-
+## std. toolchain commands
+AS = $(TARGET)as
+LD = $(TARGET)ld
+CC = $(TARGET)gcc
+CXX = $(TARGET)g++
+OBJDUMP = $(TARGET)objdump
+OBJCOPY = $(TARGET)objcopy
+
+# FlashROM size of target system, in 4K block
+FLASHBLOCKS = 4K
+emu: $(APP).flash
+	qemu-system-$(ARCH) -M connex -pflash $< \
+		-nographic -serial /dev/null
+
+$(APP).flash: $(APP).bin
+	dd if=/dev/zero of=$@ bs=4K count=$(FLASHBLOCKS)
+	dd if=$< of=$@ bs=4K conv=notrunc
+$(APP).bin: $(APP).elf
+	$(OBJCOPY) -O binary $< $@
+$(APP).elf: $(APP).o	
+	$(LD) -o $@ $<
+$(APP).o: $(APP).s
+	$(AS) -o $@ $<
+------
+
+First of all, we replaced all file names with $(APP).<extension>.
+
+NOTE: Note use of variables in `$(...)` brackets, and specials `$@` and `$<`
+
+Then, we replaced all file parameters in assembler/linker calls with 
+`$@` and `$<`, which makes our rules more rigid.
+
+Also we used some std.variables to select target system architecture, and
+prefixed all toolchain calls with $(TARGET) variable.
+
+NOTE: Now we can compile `another` source file: arrsum.s, contains listing 
+of array summation program. We `override APP variable value in command line`:  
+
+------
+$ make APP=arrsum
+
+arm-none-eabi-as -o arrsum.o arrsum.s
+arm-none-eabi-ld -o arrsum.elf arrsum.o
+arm-none-eabi-ld: warning: cannot find entry symbol _start; defaulting to 0000000000008000
+arm-none-eabi-objcopy -O binary arrsum.elf arrsum.bin
+dd if=/dev/zero of=arrsum.flash bs=4K count=4K
+4096+0 records in
+4096+0 records out
+16777216 bytes (17 MB) copied, 0.0184385 s, 910 MB/s
+dd if=arrsum.bin of=arrsum.flash bs=4K conv=notrunc
+0+1 records in
+0+1 records out
+48 bytes (48 B) copied, 5.9686e-05 s, 804 kB/s
+qemu-system-arm -M connex -pflash arrsum.flash \
+        -nographic -serial /dev/null
+QEMU 2.1.2 monitor - type 'help' for more information
+(qemu) q
+------
+
+Wow, we compiled another program without any change in Makefile, all file names
+was renamed automatically, we jet get separate flash image and running Qemu 
+in one command.
+
+Let's dig into details 
+
+[[makestdvars]]
+Standard make variables
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Some vars widely used in makefiles of OpenSource program source packages.
+You can use this makefiles as samples for lot of make tricks, 
+not covered by this tutorial.
+
+`ARCH`:: target system architecture: arm, mips, i386, x86_64, avr,...
+
+`TARGET`:: target system `triplet`: arm-none-eabi, i486-none-elf, 
+i686-linux-uclibc, selects lot of cross-compiler config parameters, vastly
+impacts on compiled binary code: CPU command set, memory layout,...
+
+`BUILD`:: triplet for your developer computer, something like x86_64-linux-gnu. 
+This var can be used if you build some helper programs, which must run on your
+workstation, for example to autogenerate some code for TARGET.
+
+`AS`:: assembler program name, as be `as` for host system, and something like 
+`super-puper-elf-as` for crosscompiler toolchain
+
+`LD`:: linker
+
+`CC`:: pure C compiler
+
+`CXX`:: C++ compiler
+
+`NM`::
+
+`OBJDUMP`::
+
+`OBJCOPY`:: object file tools
+
+`ASFLAGS`:: assembler flags
+
+`LDFLAGS`:: linker flags
+
+`CFLAGS`:: flags for C compiler, including optimization `OPT` variable 
+
+`CXXFLAGS`:: flags for C++ compiler 
+
+[[makestdtargets]]
+Standard targets
+~~~~~~~~~~~~~~~~
+
+OpenSource developers world have some widely used standard targets:
+
+`all`:: build all project, `it must be first rule in Makefile`
+
+`doc`:: build documentation, using some of asciidoc, DocBook, LaTeX,.. markup
+translators, which will translate doc sources into some widely used document
+format like .html and manual.pdf files. Fortunately, you can use special program
+packages (for some programming languages like Java, C++,..) which let you
+process your program sources and autogenerate tables of labels, function 
+definitions with parameters a.k.a call signatures, source file lists, 
+and include this tables into documentation.   
+
+`clean`:: remove all intermediate files (.o .elf .bin ...) and program binary.
+Typical use of `clean` is command which you must use for total program rebuild
+from scratch:
+
+------
+make clean
+make
+------
+
+`distclean`:: same as clean with removing generated files going into binary
+distribution of built program package: .pdf/.html documentation,..
+
+.Recommended Makefile rules
+------
+FLASH = add.flash arrsum.flash strlen.flash 
+
+.PHONY: all
+all: $(FLASH)
+
+.PHONY: clean
+	rm -rf *.o *.elf *.bin *.flash
+	
+.PHONY: distclean
+distclean: clean
+	rm -rf doc/manual.pdf
+------
+
+[[makephony]]
+.PHONY targets
+~~~~~~~~~~~~~
+
+In previous makefile sample, you can see `.PHONY some` directives.
+This directives marks `target` is one that is not really the name of a file;
+rather it is just `a name for a recipe` to be executed when you make an 
+explicit request `make some` command.
+
+If you write a rule whose `recipe goal will not create the target file`,
+mark it with .PHONY, and the recipe will be executed every time the target 
+comes up for remaking. Here is an example is `all` and `clean` targets.
+
+Because the rm command in `clean` rule does not create a file named "clean", 
+probably no such file will ever exist. Therefore, the rm command will be 
+executed every time you say ‘make clean’.
+
+NOTE: You can think about set of phony targets in Makefile as something
+like `command line menu`: you select required action by run `make action`
+
+[[makeqemu]]
+Run qemu from `Makefile`
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you define special `emu` rule:
+------
+.PHONY: emu
+emu: $(APP).flash
+	qemu-system-$(ARCH) -M connex -pflash $< \
+		-nographic -serial /dev/null
+------
+
+[[makefiles]]
+Some file/directory hints
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You can get APP name using hint:
+
+------
+APP = $(notdir $(CURDIR))
+------
+
+`$(CURDIR)`:: gives you current directory, where you run make
+
+`$(notdir ...)`:: internal functions removes leading /home/user/... part of
+directory name
+
+Thus you automagically set APP name to current directory name, for example
+you made new project:
+
+------
+$ cd ~
+$ mkdir superjob && cd superjob
+$ git init
+... write some code ...
+$ make -f ~/universal.makefile
+------
+
+NOTE: `-f` make option let you set file other then ./Makefile, you can use
+only one ~/universal.makefile for all of your projects.
+
+[[makerules]]
+Using pattern rules
+~~~~~~~~~~~~~~~~~~~
+
+Finally, let's do some strange thing: define universal pattern rules, which will 
+assemble, compile and link `any` file with specific extensions. 
+
+.Makefile pattern rules
+------
+%.o: %.s
+	$(AS) $(ASFLAGS) -o $@ $<
+%.o: %.c
+	$(CC) $(CCFLAGS) -o $@ $<
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -o $@ $<
+%.elf: %.o	
+	$(LD) $(LDFLAGS) -o $@ $<
+%.bin: %.elf
+	$(OBJCOPY) -O binary $< $@
+%.flash: %.bin
+	dd if=/dev/zero of=$@ bs=4K count=$(FLASHBLOCKS)
+	dd if=$< of=$@ bs=4K conv=notrunc
+------
+
+Now you don't need to define rules for every file compiling like:
+
+------
+file1.o : file1.s
+	$(AS) -o $@ $<
+file2.o : file2.s
+	$(AS) -o $@ $<
+#### another +100500 dumb rules ####
+file333.o : file333.s
+	$(AS) -o $@ $<
+------
+
+Just define one rule:
+
+------
+.PHONY: all
+all: file1.flash file2.flash ... file10050.flash
+------
+
+and pattern rules set will be automagically build your huge project.
+
+Suddenly, make has some metarules compiled in, and you can compile assembly,
+C/C++ and some other filetype pairs without any metarule in you file. 
+
 [[contributing]]
 Contributing
 ------------
@@ -1305,6 +1707,14 @@ The document is written in
 http://www.methods.co.nz/asciidoc/[asciidoc], and converted to HTML
 using the http://docbook.sourceforge.net/[docbook-xsl] stylesheets.
 
+Required software install
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+------
+sudo apt install asciidoc docbook imgsizer dia
+sudo apt install libsaxon-java libxslthl-java
+------
+
 [[credits]]
 Credits
 -------
@@ -1319,6 +1729,8 @@ People
     Jonathan Grant, David LeBlanc, reported typos and suggested
     fixes in the code and text.
 
+  * Dmitry Ponyatov added some info on build automation using make tool.
+	
 Tools
 ~~~~~
 
