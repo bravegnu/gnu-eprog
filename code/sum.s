@@ -10,6 +10,6 @@ start:
 	mov   r3, #0		@ r3 = 0
 loop:	ldrb  r2, [r1], #1	@ r2 = *r1++
 	add   r3, r2, r3	@ r3 += r2
-	cmp   r1, r0		@ if (r1 != r2)
+	cmp   r1, r0		@ if (r1 != r0)
 	bne   loop		@    goto loop
 stop:	b stop
