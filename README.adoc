@@ -15,6 +15,14 @@ machine. The following topics will be covered.
 The tutorial is written in asciidoc. The asciidoc source is converted
 to DocBook and then rendered to HTML.
 
+The instructions to build the documentation on Debian Jessie is given
+below.
+
+------
+# apt-get install openjdk-7-jre libsaxon-java libxslthl-java
+$ make
+------
+
 The official rendered version of the is book is available from
 http://www.bravegnu.org/gnu-eprog/
 
