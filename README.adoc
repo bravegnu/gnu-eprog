@@ -19,7 +19,7 @@ The instructions to build the documentation on Debian Jessie is given
 below.
 
 ------
-# apt-get install openjdk-7-jre libsaxon-java libxslthl-java
+# apt-get install openjdk-7-jre libsaxon-java libxslthl-java docbookxsl asciidoc imgsizer dia
 $ make
 ------
 
